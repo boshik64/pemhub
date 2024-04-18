@@ -1,0 +1,31 @@
+server {
+    index index.php;
+    server_name cert.local;
+    listen 80;
+    error_log error.log;
+    access_log access.log;
+
+    root /app/public;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass pem-fpm:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+    location ~* /(\w+/)?(\w+/)?(.+\.(webp|jpe?g|ico|gif|png|pdf|txt|tar|woff?2|woff|woff2|svg|ttf|csv|zip|xml|yml|css|js|json))$ {
+        access_log off;
+        try_files $uri $uri/ /$1/$3 /$2/$3 $3 =404;
+        expires max;
+        add_header Access-Control-Allow-Origin *;
+        add_header Cache-Control public;
+    }
+}

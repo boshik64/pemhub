@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+    # Backend service
+    pem-fpm:
+        build: ./fpm
+        #    restart: always
+        container_name: pem-fpm
+        volumes:
+            # Mount source code
+            - ../:/app
+            # Mount config files
+            - ./fpm/conf/php-custom.ini:/usr/local/etc/php/conf.d/php-custom.ini
+        networks:
+            - cert-network
+    #      - vawoo_subdomains
+
+    pem-nginx:
+        build: ./nginx
+        #    restart: always
+        container_name: pem-nginx
+        ports:
+            - "${NGINX_EXPOSE_PORT}:80"
+        volumes:
+            # Mounting logs
+            - ./nginx/logs:/var/log/nginx
+            # Mounting source code
+            - ../:/app
+            # Mounting nginx configuration
+            - ./nginx/conf/site.nginx:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - pem-fpm
+        networks:
+            cert-network:
+
+    pem-mysql:
+        image: mysql:8.0
+        #    restart: always
+        container_name: pem-mysql
+        ports:
+            - ${MYSQL_EXPOSE_PORT}:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        volumes:
+            # Mounting mysql conf
+            - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+            # Mounting mysql databases data
+            - ./mysql/data:/var/lib/mysql
+        networks:
+            - cert-network
+
+networks:
+    cert-network:
+        driver: bridge
