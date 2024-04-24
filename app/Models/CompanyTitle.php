@@ -14,7 +14,7 @@ class CompanyTitle extends Model
     protected $table = 'company_titles';
     protected $guarded = false;
 
-    public function cinemas()
+    public function cinema()
     {
         return $this->hasMany(Cinema::class, 'company_title_id', 'id');
     }

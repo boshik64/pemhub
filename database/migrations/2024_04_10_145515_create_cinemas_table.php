@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->foreign('company_title_id', 'cinemas_company_title_fk')->on('cinemas')->references('id');
             //Связь с наименованием юр.лица end
 
-            $table->string('cinema_name');
+            $table->string('cinema_name')->unique();
             $table->string('country_name')->default('RU');
             $table->string('city_name')->default('Moscow');
             $table->string('subject_name')->default('Moscow');
