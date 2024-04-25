@@ -47,6 +47,7 @@ class CinemaResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')->label('ID'),
                 TextColumn::make('cinema_name')->label('Cinema'),
             ])
             ->filters([

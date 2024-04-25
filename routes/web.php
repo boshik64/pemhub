@@ -12,3 +12,16 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/test', function () {
+    /**
+     * @var \App\Models\Merchant $merchant
+     */
+    $merchant = \App\Models\Merchant::first();
+
+    dd(
+//       $merchant->cinema()->first(),
+//       $merchant->cinema
+        $merchant->getExpiryStatus()
+);
+});

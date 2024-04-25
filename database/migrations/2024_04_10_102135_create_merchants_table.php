@@ -17,10 +17,10 @@ return new class extends Migration {
             $table->index('cinema_id', 'cinema_id_idx');
             $table->foreign('cinema_id', 'cinema_id_fk')->on('merchants')->references('id');
 
-            $table->unsignedBigInteger('mid');
+            $table->unsignedBigInteger('mid')->unique();
             $table->string('merchant_type');
             $table->string('workstation');
-            $table->string('department_name');
+            $table->string('department_name')->unique();
             $table->timestamp('next_update')->nullable();
             $table->timestamps();
 
