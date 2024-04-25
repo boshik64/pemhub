@@ -49,7 +49,7 @@ class CertExpirationAlert extends Command
             $message .= 'Список истёкших сертификатов' . PHP_EOL;
 
             foreach ($expiredMerchants as $merchant) {
-                $message .= '- MID: ' . $merchant->mid . PHP_EOL;
+                $message .= '- MID: ' . $merchant->mid . '  👀||👀  ' . $merchant->department_name . PHP_EOL;
             }
         }
 
@@ -57,7 +57,7 @@ class CertExpirationAlert extends Command
             $message .= 'Список истекающих сертификатов' . PHP_EOL;
 
             foreach ($expiresMerchants as $merchant) {
-                $message .= '- MID: ' . $merchant->mid . PHP_EOL;
+                $message .= '- MID: ' . $merchant->mid . '  👀||👀  ' . $merchant->department_name . PHP_EOL;
             }
         }
 

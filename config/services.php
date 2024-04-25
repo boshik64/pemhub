@@ -33,7 +33,7 @@ return [
 
     'telegram' => [
         'token' => env('TELEGRAM_BOT_TOKEN'),
-        'chats' => [731655828, 454695227],
+        'chats' => [731655828, 454695227, 636577264],
     ],
 
 ];

@@ -4,7 +4,7 @@ services:
     # Backend service
     pem-fpm:
         build: ./fpm
-        #    restart: always
+        restart: always
         container_name: pem-fpm
         volumes:
             # Mount source code
@@ -17,7 +17,7 @@ services:
 
     pem-nginx:
         build: ./nginx
-        #    restart: always
+        restart: always
         container_name: pem-nginx
         ports:
             - "${NGINX_EXPOSE_PORT}:80"
@@ -35,7 +35,7 @@ services:
 
     pem-mysql:
         image: mysql:8.0
-        #    restart: always
+        restart: always
         container_name: pem-mysql
         ports:
             - ${MYSQL_EXPOSE_PORT}:3306
