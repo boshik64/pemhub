@@ -39,7 +39,7 @@ class CertExpirationAlert extends Command
             }
         }
 
-        if (empty($expiresMerchants) && empty($expiresMerchants)) {
+        if (empty($expiresMerchants) && empty($expiredMerchants)) {
             return 0;
         }
 
@@ -60,7 +60,7 @@ class CertExpirationAlert extends Command
                 $message .= '- MID: ' . $merchant->mid . '  👀||👀  ' . $merchant->department_name . PHP_EOL;
             }
         }
-
+//        dd($message);
         $this->sendToTelegram($message);
     }
 
