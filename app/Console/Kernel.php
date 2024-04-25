@@ -12,8 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('cert:alert')->everyMinute();
-        $schedule->command('cert:test-msg')->everyMinute();
+        $schedule->command('cert:alert')->daily();
+//        $schedule->command('cert:test-msg')->everyMinute();
     }
 
     /**
