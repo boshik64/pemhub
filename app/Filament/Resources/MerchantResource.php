@@ -38,7 +38,7 @@ class MerchantResource extends Resource
                     ->required()
                     ->length(10)
                     ->numeric()
-                    ->unique('merchants', 'mid')
+                    ->unique('merchants', 'mid', ignoreRecord: true)
                     ->mask('9999999999'),
 
                 Forms\Components\Select::make('merchant_type')
@@ -60,7 +60,7 @@ class MerchantResource extends Resource
                 Forms\Components\TextInput::make('department_name')
                     ->required()
                     ->maxLength(255)
-                    ->unique('merchants', 'department_name')
+                    ->unique('merchants', 'department_name', ignoreRecord: true)
                     ->placeholder('Введите наименование мерчанта'),
 
                 Forms\Components\Select::make('cinema_id')
