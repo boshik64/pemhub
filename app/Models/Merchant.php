@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use mysql_xdevapi\Table;
 
@@ -26,6 +27,11 @@ class Merchant extends Model
     public function cinema()
     {
         return $this->belongsTo(Cinema::class, 'cinema_id', 'id');
+    }
+
+    public function workstation(): BelongsTo
+    {
+        return $this->belongsTo(Workstation::class);
     }
 
     public function getDistinguishedNames()

@@ -49,13 +49,16 @@ class MerchantResource extends Resource
                     ])
                     ->default('visa'),
 
-                Forms\Components\Select::make('workstation')
-                    ->required()
-                    ->options([
-                        'WWW' => 'Сайт',
-                        'MOB' => 'Мобильное приложение',
+                Forms\Components\Select::make('workstation_id')
+                    ->relationship('workstation', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
                     ])
-                    ->default('WWW'),
+                    ->required(),
 
                 Forms\Components\TextInput::make('department_name')
                     ->required()
@@ -82,7 +85,7 @@ class MerchantResource extends Resource
                 TextColumn::make('merchant_type')
                     ->searchable(),
 
-                TextColumn::make('workstation')
+                TextColumn::make('workstation.name')
                     ->searchable(),
 
                 TextColumn::make('cinema.cinema_name')
