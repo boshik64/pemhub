@@ -5,15 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use BezhanSalleh\FilamentShield\Resources\RoleResource;
+use Filament\Actions\DeleteAction;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -34,12 +39,24 @@ class UserResource extends Resource
                     ->email()
                     ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('password')
-                    ->required()
+                    ->dehydrated(fn($state) => filled($state))
+                    ->required(fn(string $context): bool => $context === 'create')
                     ->maxLength(50)
                     ->password()
                     ->revealable(function (User $user) {
                         return !$user->exists;
                     }),
+                Forms\Components\Select::make('workstations')
+                    ->multiple()
+                    ->required()
+                    ->relationship('workstations', 'name')
+                    ->preload(),
+                Forms\Components\Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->hidden(function (User $user) {
+                        return $user->hasRole('super_admin');
+                    })
+                    ->preload(),
             ]);
     }
 
@@ -61,7 +78,22 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function (Tables\Actions\DeleteBulkAction $action) {
+                            $authUser = Filament::auth()->user()->id;
+                            $selectedUsers = $action->getRecords();
+                            foreach ($selectedUsers as $selectedUser) {
+                                if ($selectedUser->id == $authUser) {
+                                    Notification::make()
+                                        ->warning()
+                                        ->title('ОШИБКА')
+                                        ->body('Нельзя удалить самого себя, это суицид.')
+                                        ->persistent()
+                                        ->send();
+                                    $action->cancel();
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }
@@ -69,7 +101,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\WorkstationsRelationManager::class
+
         ];
     }
 

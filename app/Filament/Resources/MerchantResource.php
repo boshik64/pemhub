@@ -9,6 +9,7 @@ use App\Models\Merchant;
 use App\OpenSSL\OpenSSlFactory;
 use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -78,6 +79,12 @@ class MerchantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $user = Filament::auth()->user();
+                $workstations = $user->workstations->pluck('id');
+
+                $query->whereIn('workstation_id', $workstations);
+            })
             ->columns([
                 TextColumn::make('mid')
                     ->searchable(),
