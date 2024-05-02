@@ -47,18 +47,18 @@ class CertExpirationAlert extends Command
         $message = '';
 
         if (!empty($expiredMerchants)) {
-            $message .= '<b>Список истёкших сертификатов</b>' . PHP_EOL;
+            $message .= '<b>🛑 Список истёкших сертификатов</b>' . PHP_EOL;
 
             foreach ($expiredMerchants as $merchant) {
-                $message .= '#️⃣ MID: ' . $merchant->mid . '  ||  ' . '🏦' . $merchant->department_name . '  ||  ' . 'Просрочено на: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
+                $message .= $merchant->mid . ' ‼️ ' . $merchant->department_name . ' 🕕 ' . 'Просрочено на: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
             }
         }
 
         if (!empty($expiresMerchants)) {
-            $message .= '<b>Список истекающих сертификатов</b>' . PHP_EOL;
+            $message .= '<b>⚠️ Список истекающих сертификатов</b>' . PHP_EOL;
 
             foreach ($expiresMerchants as $merchant) {
-                $message .= '#️⃣ MID: ' . $merchant->mid . '  ||  ' . '🏦' . $merchant->department_name . '  ||  ' . 'Осталось: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
+                $message .= $merchant->mid . ' ❗️ ' . $merchant->department_name . ' 🕕 ' . 'Осталось: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
             }
         }
 //        dd($message);
