@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Merchant;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -27,7 +28,7 @@ class CertExpirationAlert extends Command
      */
     public function handle()
     {
-        $merchants = Merchant::all();
+        $merchants = Merchant::all()->sortByDesc('workstation_id');
         $expiresMerchants = [];
         $expiredMerchants = [];
 
@@ -46,18 +47,18 @@ class CertExpirationAlert extends Command
         $message = '';
 
         if (!empty($expiredMerchants)) {
-            $message .= 'Список истёкших сертификатов' . PHP_EOL;
+            $message .= '<b>Список истёкших сертификатов</b>' . PHP_EOL;
 
             foreach ($expiredMerchants as $merchant) {
-                $message .= '- MID: ' . $merchant->mid . '  👀||👀  ' . $merchant->department_name . PHP_EOL;
+                $message .= '#️⃣ MID: ' . $merchant->mid . '  ||  ' . '🏦' . $merchant->department_name . '  ||  ' . 'Просрочено на: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
             }
         }
 
         if (!empty($expiresMerchants)) {
-            $message .= 'Список истекающих сертификатов' . PHP_EOL;
+            $message .= '<b>Список истекающих сертификатов</b>' . PHP_EOL;
 
             foreach ($expiresMerchants as $merchant) {
-                $message .= '- MID: ' . $merchant->mid . '  👀||👀  ' . $merchant->department_name . PHP_EOL;
+                $message .= '#️⃣ MID: ' . $merchant->mid . '  ||  ' . '🏦' . $merchant->department_name . '  ||  ' . 'Осталось: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
             }
         }
 //        dd($message);
@@ -73,7 +74,8 @@ class CertExpirationAlert extends Command
         foreach ($chats as $chat_id) {
             Http::post($apiUrl, [
                 'text' => $message,
-                'chat_id' => $chat_id
+                'chat_id' => $chat_id,
+                'parse_mode' => 'html'
             ]);
         }
     }

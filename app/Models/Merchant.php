@@ -49,7 +49,7 @@ class Merchant extends Model
 
     public function getExpiryStatus()
     {
-        $diff = Carbon::now()->diffInDays($this->next_update, false);
+        $diff = Carbon::now()->diffInDays($this->next_update,false);
 
         if ($diff <= 0) {
             return self::CERT_EXPIRED;
