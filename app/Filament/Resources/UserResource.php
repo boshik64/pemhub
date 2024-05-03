@@ -48,7 +48,7 @@ class UserResource extends Resource
                     }),
                 Forms\Components\Select::make('workstations')
                     ->multiple()
-                    ->required()
+//                    ->required()
                     ->relationship('workstations', 'name')
                     ->preload(),
                 Forms\Components\Select::make('roles')
