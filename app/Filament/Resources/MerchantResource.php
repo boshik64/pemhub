@@ -82,8 +82,10 @@ class MerchantResource extends Resource
             ->modifyQueryUsing(function (Builder $query) {
                 $user = Filament::auth()->user();
                 $workstations = $user->workstations->pluck('id');
+                if (!$workstations->empty()) {
+                    $query->whereIn('workstation_id', $workstations);
+                }
 
-                $query->whereIn('workstation_id', $workstations);
             })
             ->columns([
                 TextColumn::make('mid')

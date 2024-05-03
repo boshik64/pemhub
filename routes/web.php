@@ -1,5 +1,6 @@
 <?php
 
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
     /**
-     * @var \App\Models\Merchant $merchant
+     * @var \App\Models\User $user
      */
     $merchant = \App\Models\Merchant::first();
-
+    $user = Filament::auth()->user();
     dd(
 //       $merchant->cinema()->first(),
 //       $merchant->cinema
-        $merchant->getExpiryStatus()
-);
+        $user->workstations()->pluck('id')
+    );
 });
