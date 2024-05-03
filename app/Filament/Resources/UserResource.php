@@ -69,6 +69,8 @@ class UserResource extends Resource
                     ->searchable(),
                 TextColumn::make('email')
                     ->searchable(),
+                TextColumn::make('roles.name')
+                ->searchable(),
             ])
             ->filters([
                 //
