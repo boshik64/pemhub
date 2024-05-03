@@ -50,6 +50,9 @@ class UserResource extends Resource
                     ->multiple()
 //                    ->required()
                     ->relationship('workstations', 'name')
+                    ->hidden(function (User $user) {
+                        return $user->hasRole('super_admin');
+                    })
                     ->preload(),
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
