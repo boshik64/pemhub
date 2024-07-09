@@ -169,7 +169,7 @@ class MerchantResource extends Resource
                         ->label('Create and Download ZIP')
                         ->icon('heroicon-o-pencil')
                         ->action(function (Collection $models) {
-                            $zipFileName = 'collection' . time() . '.zip';
+                            $zipFileName = 'collection.zip';
 
                             $zip = new ZipArchive();
                             if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
