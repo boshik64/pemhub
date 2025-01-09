@@ -20,11 +20,10 @@ class SyncKaroFilmsToFlix extends Command
             ->where('site_id', '>', 0)
             ->get(['id', 'site_id', 'flix_id', 'cinema_name']); // Забираем сразу нужные поля
 
-        $allData = ['schedule' => []];
+        $allData = ['schedule' => []]; // Итоговый массив
 
         foreach ($cinemas as $cinema) {
             $this->info("Обрабатываем кинотеатр ID:{$cinema->site_id} {$cinema->cinema_name}");
-
 
             // Выполняем запрос к API
             $response = Http::get("https://api.karofilm.ru/cinema-schedule", [
@@ -36,6 +35,8 @@ class SyncKaroFilmsToFlix extends Command
 
                 // Преобразование данных
                 $formattedData = $this->transformData($cinema, $data);
+
+                // Добавляем данные по кинотеатру в итоговый массив
                 $allData['schedule'][] = $formattedData;
 
                 $this->info("Данные для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name} успешно обработаны.");
@@ -61,20 +62,17 @@ class SyncKaroFilmsToFlix extends Command
      */
     private function transformData(object $cinema, array $data): array
     {
-        $sessions = [];
+        $allSessions = []; // Общий массив для всех сеансов
 
         // Проверяем, что данные в 'data' и 'items' существуют и являются массивом
         if (isset($data['data']['items']) && is_array($data['data']['items'])) {
             foreach ($data['data']['items'] as $movie) {
                 // Проходим по каждому формату фильма (например, 2D)
                 foreach ($movie['formats'] as $format) {
-                    // Создаём массив для сеансов
-                    $movieSessions = [];
-
                     // Проходим по каждому сеансу в формате
                     foreach ($format['sessions'] as $session) {
                         // Собираем информацию по сеансам
-                        $movieSessions[] = [
+                        $allSessions[] = [
                             'kinoplan_release_id' => 1997, // Статическое значение
                             'pushkin_card' => true, // Всегда true
                             'datetime' => $session['showtime'], // Берём значение из `showtime`
@@ -83,18 +81,16 @@ class SyncKaroFilmsToFlix extends Command
                             'external_link' => "https://karofilm.ru/order/session/{$session['id']}" // Формируем ссылку на покупку билетов
                         ];
                     }
-
-                    // Добавляем данные для каждого кинотеатра
-                    $sessions[] = [
-                        'cinema_id' => $cinema->flix_id, // Получаем flix_id из базы данных
-                        'sessions' => $movieSessions // Массив сеансов для текущего фильма
-                    ];
                 }
             }
         } else {
             Log::warning("No 'items' found for cinema ID: {$cinema->id}");
         }
 
-        return ['schedule' => $sessions];
+        // Формируем данные в соответствии с эталонной структурой
+        return [
+            'cinema_id' => $cinema->flix_id,
+            'sessions' => $allSessions,
+        ];
     }
 }
