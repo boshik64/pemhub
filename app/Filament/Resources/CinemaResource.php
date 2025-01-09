@@ -40,6 +40,13 @@ class CinemaResource extends Resource
                     ])
                     ->required(),
 
+                Forms\Components\TextInput::make('flix_id')
+                    ->maxLength(12)
+                    ->label('Flix ID'),
+                Forms\Components\TextInput::make('site_id')
+                    ->maxLength(12)
+                    ->label('Site ID'),
+
             ]);
     }
 
@@ -48,6 +55,8 @@ class CinemaResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->label('ID'),
+                TextColumn::make('flix_id')->label('Flix ID'),
+                TextColumn::make('site_id')->label('Site ID'),
                 TextColumn::make('cinema_name')->label('Cinema'),
             ])
             ->filters([
