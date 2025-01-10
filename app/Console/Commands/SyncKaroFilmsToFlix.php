@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Console\Commands;
 
@@ -18,14 +18,13 @@ class SyncKaroFilmsToFlix extends Command
         $cinemas = DB::table('cinemas')
             ->whereNotNull('site_id')
             ->where('site_id', '>', 0)
-            ->get(['id', 'site_id', 'flix_id', 'cinema_name']); // Забираем сразу нужные поля
-
-        $allData = ['schedule' => []]; // Итоговый массив
+            ->whereIn('id', [4, 5])  // Выбираем кинотеатры с id 4 и 5
+            ->get(['id', 'site_id', 'flix_id', 'cinema_name', 'site_directory_id']); // Забираем сразу нужные поля
 
         foreach ($cinemas as $cinema) {
             $this->info("Обрабатываем кинотеатр ID:{$cinema->site_id} {$cinema->cinema_name}");
 
-            // Выполняем запрос к API
+            // Выполняем запрос к API для получения расписания для всех фильмов в кинотеатре
             $response = Http::get("https://api.karofilm.ru/cinema-schedule", [
                 'cinema_id' => $cinema->site_id,
             ]);
@@ -36,25 +35,19 @@ class SyncKaroFilmsToFlix extends Command
                 // Преобразование данных
                 $formattedData = $this->transformData($cinema, $data);
 
-                // Добавляем данные по кинотеатру в итоговый массив
-                $allData['schedule'][] = $formattedData;
+                // Формируем имя файла на основе имени кинотеатра (например: "KARO_11_Октябрь.json")
+                $filePath = base_path("{$cinema->cinema_name}.json");
 
-                $this->info("Данные для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name} успешно обработаны.");
+                // Записываем данные в файл, соответствующий кинотеатру
+                file_put_contents($filePath, json_encode($formattedData, JSON_PRETTY_PRINT));
+
+                $this->info("Данные для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name} успешно обработаны и записаны в файл.");
             } else {
                 $this->error("Ошибка запроса для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name}");
             }
         }
 
-        $this->info("Обработка завершена. Всего собрано данных: " . count($allData['schedule']));
-
-        // Записываем данные в файл в корне проекта
-        $filePath = base_path('cinema_data.json'); // Путь к файлу в корне проекта
-        file_put_contents($filePath, json_encode($allData, JSON_PRETTY_PRINT));
-
-        // Логируем путь, куда записан файл
-        Log::info('File saved to: ' . $filePath);
-
-        // Здесь можно отправить $allData в POST-запрос, если нужно
+        $this->info("Обработка завершена.");
     }
 
     /**
@@ -64,19 +57,27 @@ class SyncKaroFilmsToFlix extends Command
     {
         $allSessions = []; // Общий массив для всех сеансов
 
+        // Получаем данные для фильма из directory
+        $directoryData = $this->fetchDirectoryDataForCinema($cinema->site_directory_id);
+
         // Проверяем, что данные в 'data' и 'items' существуют и являются массивом
         if (isset($data['data']['items']) && is_array($data['data']['items'])) {
+            // Для каждого фильма из расписания
             foreach ($data['data']['items'] as $movie) {
+                // Извлекаем kinoplan_id и is_pushkin для фильма
+                $kinoplanReleaseId = $directoryData[$movie['id']]['kinoplan_id'] ?? 1997; // Значение по умолчанию
+                $pushkinCard = $directoryData[$movie['id']]['is_pushkin'] ?? true; // Значение по умолчанию
+
                 // Проходим по каждому формату фильма (например, 2D)
                 foreach ($movie['formats'] as $format) {
                     // Проходим по каждому сеансу в формате
                     foreach ($format['sessions'] as $session) {
-                        // Собираем информацию по сеансам
+                        // Проставляем данные для этого сеанса, связываем с фильмом
                         $allSessions[] = [
-                            'kinoplan_release_id' => 1997, // Статическое значение
-                            'pushkin_card' => true, // Всегда true
-                            'datetime' => $session['showtime'], // Берём значение из `showtime`
-                            'price' => $session['standard_price'], // Цена из `standard_price`
+                            'kinoplan_release_id' => $kinoplanReleaseId, // kinoplan_id для фильма
+                            'pushkin_card' => $pushkinCard, // is_pushkin для фильма
+                            'datetime' => $session['showtime'], // Время сеанса
+                            'price' => $session['standard_price'], // Цена сеанса
                             'format_id' => 1, // Статическое значение
                             'external_link' => "https://karofilm.ru/order/session/{$session['id']}" // Формируем ссылку на покупку билетов
                         ];
@@ -89,8 +90,41 @@ class SyncKaroFilmsToFlix extends Command
 
         // Формируем данные в соответствии с эталонной структурой
         return [
-            'cinema_id' => $cinema->flix_id,
-            'sessions' => $allSessions,
+            'schedule' => [
+                [
+                    'cinema_id' => $cinema->flix_id,
+                    'sessions' => $allSessions,
+                ],
+            ],
         ];
+    }
+
+    private function fetchDirectoryDataForCinema(int $siteDirectoryId): array
+    {
+        // Выполняем запрос для получения всех данных из directory
+        $response = Http::get("https://api.karofilm.ru/directory/{$siteDirectoryId}");
+
+        $directoryData = [];
+        if ($response->successful()) {
+            $data = $response->json();
+
+            Log::info('Directory response:', $data);
+
+            // Проверяем, что ключ 'movie' существует и является массивом
+            if (isset($data['data']['movie']) && is_array($data['data']['movie'])) {
+                foreach ($data['data']['movie'] as $movie) {
+                    $directoryData[$movie['id']] = [
+                        'kinoplan_id' => $movie['kinoplan_id'] ?? null,
+                        'is_pushkin' => $movie['is_pushkin'] ?? null,
+                    ];
+                }
+            }
+
+            Log::info("Directory data fetched for site_directory_id: {$siteDirectoryId}");
+        } else {
+            Log::error("Directory request failed with status: {$response->status()}");
+        }
+
+        return $directoryData; // Возвращаем данные для всех фильмов
     }
 }

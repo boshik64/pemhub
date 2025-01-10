@@ -46,6 +46,9 @@ class CinemaResource extends Resource
                 Forms\Components\TextInput::make('site_id')
                     ->maxLength(12)
                     ->label('Site ID'),
+                Forms\Components\TextInput::make('site_directory_id')
+                    ->maxLength(12)
+                    ->label('Directory ID'),
 
             ]);
     }
