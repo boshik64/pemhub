@@ -64,26 +64,32 @@ class SyncKaroFilmsToFlix extends Command
         if (isset($data['data']['items']) && is_array($data['data']['items'])) {
             // Для каждого фильма из расписания
             foreach ($data['data']['items'] as $movie) {
-                // Извлекаем kinoplan_id и is_pushkin для фильма
-                $kinoplanReleaseId = $directoryData[$movie['id']]['kinoplan_id'] ?? 1997; // Значение по умолчанию
-                $pushkinCard = $directoryData[$movie['id']]['is_pushkin'] ?? true; // Значение по умолчанию
-
-                // Проходим по каждому формату фильма (например, 2D)
-                foreach ($movie['formats'] as $format) {
-                    // Проходим по каждому сеансу в формате
-                    foreach ($format['sessions'] as $session) {
-                        // Проставляем данные для этого сеанса, связываем с фильмом
-                        $allSessions[] = [
-                            'kinoplan_release_id' => $kinoplanReleaseId, // kinoplan_id для фильма
-                            'pushkin_card' => $pushkinCard, // is_pushkin для фильма
-                            'datetime' => $session['showtime'], // Время сеанса
-                            'price' => $session['standard_price'], // Цена сеанса
-                            'format_id' => 1, // Статическое значение
-                            'external_link' => "https://karofilm.ru/order/session/{$session['id']}" // Формируем ссылку на покупку билетов
-                        ];
+                // Проверяем, существует ли запись для текущего фильма в $directoryData
+                if (isset($directoryData[$movie['id']])) {
+                    $kinoplanReleaseId = $directoryData[$movie['id']]['kinoplan_id'];
+                    $pushkinCard = $directoryData[$movie['id']]['is_pushkin'];
+            
+                    // Проходим по каждому формату фильма (например, 2D)
+                    foreach ($movie['formats'] as $format) {
+                        // Проходим по каждому сеансу в формате
+                        foreach ($format['sessions'] as $session) {
+                            // Проставляем данные для этого сеанса, связываем с фильмом
+                            $allSessions[] = [
+                                'kinoplan_release_id' => $kinoplanReleaseId, // kinoplan_id для фильма
+                                'pushkin_card' => $pushkinCard, // is_pushkin для фильма
+                                'datetime' => $session['showtime'], // Время сеанса
+                                'price' => $session['standard_price'], // Цена сеанса
+                                'format_id' => 1, // Статическое значение
+                                'external_link' => "https://karofilm.ru/order/session/{$session['id']}" // Формируем ссылку на покупку билетов
+                            ];
+                        }
                     }
+                } else {
+                    // Логируем, если фильм отсутствует в данных directory
+                    Log::warning("Movie ID {$movie['id']} not found in directory data for cinema ID {$cinema->id}");
                 }
             }
+            
         } else {
             Log::warning("No 'items' found for cinema ID: {$cinema->id}");
         }
