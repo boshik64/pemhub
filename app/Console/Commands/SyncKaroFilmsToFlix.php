@@ -37,7 +37,7 @@ class SyncKaroFilmsToFlix extends Command
                 $formattedData = $this->transformData($cinema, $data);
 
                 // Формируем имя файла на основе ID кинотеатра (например: "10.json")
-                $filePath = base_path("{$cinema->id}.json");
+                $filePath = base_path("Karo_sync_logs/{$cinema->id}.json");
 
                 // Записываем данные в файл, соответствующий кинотеатру
                 file_put_contents($filePath, json_encode($formattedData, JSON_PRETTY_PRINT));
@@ -74,6 +74,11 @@ class SyncKaroFilmsToFlix extends Command
                     $kinoplanReleaseId = (int) $directoryData[$movie['id']]['kinoplan_id']; // Преобразуем в целое число
                     $pushkinCard = $directoryData[$movie['id']]['is_pushkin'];
 
+                    // Пропускаем сеансы, если kinoplanReleaseId равен 0 или null
+                    if ($kinoplanReleaseId === 0 || $kinoplanReleaseId === null) {
+                        continue; // Пропускаем текущий фильм и его сеансы
+                    }
+
                     // Проходим по каждому формату фильма (например, 2D)
                     foreach ($movie['formats'] as $format) {
                         // Проходим по каждому сеансу в формате
@@ -83,7 +88,7 @@ class SyncKaroFilmsToFlix extends Command
                                 'kinoplan_release_id' => $kinoplanReleaseId, // kinoplan_id для фильма (целое число)
                                 'pushkin_card' => $pushkinCard, // is_pushkin для фильма
                                 'datetime' => Carbon::parse($session['showtime'])->format('Y-m-d\TH:i:s\Z'), // Преобразуем дату в формат ISO-8601 с Z
-                                'price' => (int) $session['standard_price'], // Преобразуем цену в целое число
+                                'price' => (int) ($session['standard_price'] / 100), // Преобразуем цену в целое число
                                 'format_id' => 1, // Статическое значение
                                 'external_link' => "https://karofilm.ru/order/session/{$session['id']}" // Формируем ссылку на покупку билетов
                             ];
@@ -108,6 +113,7 @@ class SyncKaroFilmsToFlix extends Command
             ],
         ];
     }
+
 
 
     private function fetchDirectoryDataForCinema(int $siteDirectoryId): array
@@ -147,6 +153,7 @@ class SyncKaroFilmsToFlix extends Command
 
         if ($response->successful()) {
             $this->info("POST-запрос для {$cinemaName} успешно отправлен.");
+            Log::error("POST-запрос для {$cinemaName} завершился успешно. Ответ: " . $response->body());
         } else {
             $this->error("Ошибка отправки POST-запроса для {$cinemaName}. Статус: {$response->status()}");
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Ответ: " . $response->body());
