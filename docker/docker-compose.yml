@@ -1,4 +1,12 @@
-
+x-def-logging: &default-logging
+    logging:
+        driver: "loki"
+        options:
+            loki-url: "http://65.109.13.177:3100/loki/api/v1/push"
+            loki-batch-size: "100"
+            loki-retries: 2
+            loki-max-backoff: 1000ms
+            loki-timeout: 1s
 
 services:
     # Backend service
@@ -49,6 +57,18 @@ services:
             - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
             # Mounting mysql databases data
             - ./mysql/data:/var/lib/mysql
+        networks:
+            - cert-network
+
+    pem-cli-cron:
+        <<: *default-logging
+        build:
+            context: ./cron
+        restart: always
+        container_name: pem-cli-cron
+        volumes:
+            - ../:/app
+            - ./cron/conf/php-custom.ini:/usr/local/etc/php/conf.d/php-custom.ini
         networks:
             - cert-network
 
