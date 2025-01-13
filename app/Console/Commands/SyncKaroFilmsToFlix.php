@@ -36,13 +36,7 @@ class SyncKaroFilmsToFlix extends Command
                 // Преобразование данных
                 $formattedData = $this->transformData($cinema, $data);
 
-                // Формируем имя файла на основе ID кинотеатра (например: "10.json")
-                $filePath = base_path("Karo_sync_logs/{$cinema->id}.json");
-
-                // Записываем данные в файл, соответствующий кинотеатру
-                file_put_contents($filePath, json_encode($formattedData, JSON_PRETTY_PRINT));
-
-                $this->info("Данные для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name} успешно обработаны и записаны в файл.");
+                $this->info("Данные для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name} успешно обработаны.");
 
                 // Отправляем POST-запрос с данными
                 $this->sendToExternalApi($formattedData, $cinema->cinema_name);
@@ -124,9 +118,6 @@ class SyncKaroFilmsToFlix extends Command
         $directoryData = [];
         if ($response->successful()) {
             $data = $response->json();
-
-            Log::info('Directory response:', $data);
-
             // Проверяем, что ключ 'movie' существует и является массивом
             if (isset($data['data']['movie']) && is_array($data['data']['movie'])) {
                 foreach ($data['data']['movie'] as $movie) {
@@ -151,12 +142,20 @@ class SyncKaroFilmsToFlix extends Command
             'App-key' => '26a830928e4641f585b03ebf87c1499f',
         ])->post('https://dev-flix.infinitystudio.ru/api/schedule/', $data);
 
-        if ($response->successful()) {
-            $this->info("POST-запрос для {$cinemaName} успешно отправлен.");
-            Log::error("POST-запрос для {$cinemaName} завершился успешно. Ответ: " . $response->body());
+        // Извлекаем основные поля из JSON-ответа
+        $responseBody = $response->json();
+        $status = $responseBody['status'] ?? 'unknown'; // Извлекаем 'status', если есть
+        $message = $responseBody['message'] ?? 'No message provided'; // Извлекаем 'message', если есть
+        $details = isset($responseBody['details']) && is_array($responseBody['details'])
+            ? json_encode($responseBody['details'], JSON_PRETTY_PRINT) // Преобразуем массив в строку
+            : 'No details provided';
+
+        if ($response->successful() && $status === 'success') {
+            Log::info("POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}");
         } else {
-            $this->error("Ошибка отправки POST-запроса для {$cinemaName}. Статус: {$response->status()}");
-            Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Ответ: " . $response->body());
+            // Логируем ошибку, если статус не "success" или если запрос не успешен
+            $this->error("Ошибка отправки POST-запроса для {$cinemaName}. Статус: {$status}. Смотрите логи!");
+            Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
         }
     }
 }
