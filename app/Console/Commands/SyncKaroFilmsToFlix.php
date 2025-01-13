@@ -137,10 +137,21 @@ class SyncKaroFilmsToFlix extends Command
 
     private function sendToExternalApi(array $data, string $cinemaName): void
     {
+        // Создаём имя файла на основе имени кинотеатра
+        $filePath = base_path("Karo_post_logs/{$cinemaName}_post_data.json");
+
+        // Проверяем, существует ли директория. Если нет — создаём её.
+        if (!is_dir(dirname($filePath))) {
+            mkdir(dirname($filePath), 0777, true); // Создаём директорию с рекурсией
+        }
+
+        // Записываем данные, отправляемые в POST-запрос, в JSON-файл
+        file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
+
         $response = Http::withHeaders([
             'App-key' => '26a830928e4641f585b03ebf87c1499f',
         ])->post('https://dev-flix.infinitystudio.ru/api/schedule/', $data);
-    
+
         // Извлекаем основные поля из JSON-ответа
         $responseBody = $response->json();
         $status = $responseBody['status'] ?? 'unknown'; // Извлекаем 'status', если есть
@@ -150,7 +161,7 @@ class SyncKaroFilmsToFlix extends Command
         $details = isset($responseBody['details']) && is_array($responseBody['details'])
             ? json_encode($responseBody['details'], JSON_PRETTY_PRINT) // Преобразуем массив в строку
             : 'No details provided';
-    
+
         if ($response->successful() && $status === 'success') {
             Log::info("POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}");
         } else {
@@ -159,6 +170,6 @@ class SyncKaroFilmsToFlix extends Command
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
         }
     }
-    
+
 }
 
