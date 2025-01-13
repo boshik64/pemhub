@@ -19,7 +19,7 @@ class SyncKaroFilmsToFlix extends Command
         $cinemas = DB::table('cinemas')
             ->whereNotNull('site_id')
             ->where('site_id', '>', 0)
-            ->whereIn('id', [4])  // Выбираем кинотеатры с id 4 и 5
+            // ->whereIn('id', [4])  // Выбираем кинотеатры с id 4 для теста
             ->get(['id', 'site_id', 'flix_id', 'cinema_name', 'site_directory_id']); // Забираем сразу нужные поля
 
         foreach ($cinemas as $cinema) {
