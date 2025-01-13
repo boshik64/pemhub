@@ -127,8 +127,6 @@ class SyncKaroFilmsToFlix extends Command
                     ];
                 }
             }
-
-            Log::info("Directory data fetched for site_directory_id: {$siteDirectoryId}");
         } else {
             Log::error("Directory request failed with status: {$response->status()}");
         }
@@ -141,15 +139,17 @@ class SyncKaroFilmsToFlix extends Command
         $response = Http::withHeaders([
             'App-key' => '26a830928e4641f585b03ebf87c1499f',
         ])->post('https://dev-flix.infinitystudio.ru/api/schedule/', $data);
-
+    
         // Извлекаем основные поля из JSON-ответа
         $responseBody = $response->json();
         $status = $responseBody['status'] ?? 'unknown'; // Извлекаем 'status', если есть
-        $message = $responseBody['message'] ?? 'No message provided'; // Извлекаем 'message', если есть
+        $message = isset($responseBody['message'])
+            ? (is_array($responseBody['message']) ? json_encode($responseBody['message']) : $responseBody['message']) // Преобразуем массив в строку
+            : 'No message provided';
         $details = isset($responseBody['details']) && is_array($responseBody['details'])
             ? json_encode($responseBody['details'], JSON_PRETTY_PRINT) // Преобразуем массив в строку
             : 'No details provided';
-
+    
         if ($response->successful() && $status === 'success') {
             Log::info("POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}");
         } else {
@@ -158,5 +158,6 @@ class SyncKaroFilmsToFlix extends Command
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
         }
     }
+    
 }
 
