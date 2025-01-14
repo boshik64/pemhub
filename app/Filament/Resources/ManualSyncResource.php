@@ -4,16 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Models\ManualSync;
 use App\Filament\Resources\ManualSyncResource\Pages;
-use App\Filament\Resources\CinemaResource\RelationManagers;
-use App\Models\Cinema;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ManualSyncResource\Pages\ListManualSyncs;
 
 class ManualSyncResource extends Resource
 {
@@ -48,8 +46,14 @@ class ManualSyncResource extends Resource
                 Tables\Columns\TextColumn::make('details')->label('Детали')->limit(50),
                 Tables\Columns\TextColumn::make('created_at')->label('Создано')->dateTime(),
             ])
+            ->actions([
+                Action::make('viewDetails')
+                    ->label('Просмотр результата')
+                    ->modalHeading('Результат выполнения синхронизации')
+                    ->modalContent(fn ($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output]))
+                    ->button()
+            ])
             ->filters([])
-            ->actions([])
             ->bulkActions([]);
     }
 
