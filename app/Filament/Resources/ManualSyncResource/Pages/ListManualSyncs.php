@@ -32,12 +32,15 @@ class ListManualSyncs extends ListRecords
             Artisan::call('app:sync-karo-films-to-flix');
             $output = Artisan::output(); // Получаем вывод команды
 
+            // Подсвечиваем ошибку в выводе
+            $output = preg_replace('/(Ошибка отправки POST-запроса)/', '<span style="color: red; font-weight: bold;">$1</span>', $output);
+
             // Сохраняем результат в базу данных
             ManualSync::create([
                 'type' => 'manual',
                 'status' => 'completed', // Устанавливаем статус "completed"
                 'details' => 'Синхронизация завершена', // Статус для details
-                'output' => $output, // Сохраняем вывод команды
+                'output' => $output, // Сохраняем вывод команды с подсветкой
             ]);
 
             // Отображаем уведомление об успехе

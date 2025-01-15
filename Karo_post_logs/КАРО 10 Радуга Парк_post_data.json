@@ -6,14 +6,6 @@
                 {
                     "kinoplan_release_id": 17790,
                     "pushkin_card": true,
-                    "datetime": "2025-01-15T15:20:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376032481"
-                },
-                {
-                    "kinoplan_release_id": 17790,
-                    "pushkin_card": true,
                     "datetime": "2025-01-15T16:10:00Z",
                     "price": 350,
                     "format_id": 1,
@@ -642,14 +634,6 @@
                     "price": 430,
                     "format_id": 1,
                     "external_link": "https:\/\/karofilm.ru\/order\/session\/376043131"
-                },
-                {
-                    "kinoplan_release_id": 22826,
-                    "pushkin_card": false,
-                    "datetime": "2025-01-15T15:30:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376042323"
                 },
                 {
                     "kinoplan_release_id": 20984,
