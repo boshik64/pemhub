@@ -34,14 +34,15 @@ class ListManualSyncs extends ListRecords
 
             // Сохраняем результат в базу данных
             ManualSync::create([
-                'type' => 'karo-films-to-flix',
-                'status' => 'completed',
-                'output' => $output,
+                'type' => 'manual',
+                'status' => 'completed', // Устанавливаем статус "completed"
+                'details' => 'Синхронизация завершена', // Статус для details
+                'output' => $output, // Сохраняем вывод команды
             ]);
 
             // Отображаем уведомление об успехе
             Notification::make()
-                ->title('Синхронизация выполнена успешно!')
+                ->title('Синхронизация выполнена')
                 ->success()
                 ->body('Результат выполнения команды сохранён в базу данных.')
                 ->send();

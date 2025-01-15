@@ -4,14 +4,6 @@
             "cinema_id": 20,
             "sessions": [
                 {
-                    "kinoplan_release_id": 21419,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T12:40:00Z",
-                    "price": 500,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376034642"
-                },
-                {
                     "kinoplan_release_id": 17790,
                     "pushkin_card": true,
                     "datetime": "2025-01-15T13:05:00Z",

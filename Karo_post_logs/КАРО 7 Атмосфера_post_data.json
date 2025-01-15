@@ -4,20 +4,508 @@
             "cinema_id": 15,
             "sessions": [
                 {
-                    "kinoplan_release_id": 20870,
+                    "kinoplan_release_id": 20984,
                     "pushkin_card": true,
-                    "datetime": "2025-01-15T12:20:00Z",
+                    "datetime": "2025-01-15T13:25:00Z",
                     "price": 250,
                     "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040317"
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031138"
                 },
                 {
-                    "kinoplan_release_id": 17790,
+                    "kinoplan_release_id": 20984,
                     "pushkin_card": true,
-                    "datetime": "2025-01-15T12:50:00Z",
+                    "datetime": "2025-01-15T14:50:00Z",
                     "price": 250,
                     "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031137"
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040322"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-15T16:20:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031140"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-15T17:45:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040327"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-15T19:15:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031142"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-15T20:35:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040333"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-15T21:50:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040335"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T10:30:00Z",
+                    "price": 230,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046727"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T12:00:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046732"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T13:25:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046736"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T14:55:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046739"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T16:20:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046743"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T17:50:00Z",
+                    "price": 390,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046747"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T19:15:00Z",
+                    "price": 390,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046751"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-16T20:45:00Z",
+                    "price": 390,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046755"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T10:30:00Z",
+                    "price": 230,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046761"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T12:00:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046766"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T13:25:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046770"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T14:55:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046773"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T16:20:00Z",
+                    "price": 330,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046777"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T17:50:00Z",
+                    "price": 390,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046781"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T19:15:00Z",
+                    "price": 390,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046785"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-17T20:45:00Z",
+                    "price": 390,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046789"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T10:30:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046796"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T12:10:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046800"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T13:25:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046803"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T14:55:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046806"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T16:20:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046810"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T17:50:00Z",
+                    "price": 410,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046814"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T19:15:00Z",
+                    "price": 410,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046818"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-18T20:45:00Z",
+                    "price": 410,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046822"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T10:30:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046828"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T12:00:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046833"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T13:25:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046837"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T14:55:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046840"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T16:20:00Z",
+                    "price": 360,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046844"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T17:50:00Z",
+                    "price": 410,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046848"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T19:15:00Z",
+                    "price": 410,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046852"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-19T20:45:00Z",
+                    "price": 410,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046856"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T10:30:00Z",
+                    "price": 200,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046862"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T12:00:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046867"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T13:25:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046870"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T14:55:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046873"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T16:20:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046877"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T17:50:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046881"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T19:15:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046885"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-20T20:45:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046889"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T10:30:00Z",
+                    "price": 200,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046895"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T12:00:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046900"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T13:25:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046904"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T14:55:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046907"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T16:20:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046911"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T17:50:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046915"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T19:15:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046919"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-21T20:45:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046923"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T10:30:00Z",
+                    "price": 200,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046929"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T12:00:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046934"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T13:25:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046938"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T14:55:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046941"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T16:20:00Z",
+                    "price": 250,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046945"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T17:50:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046949"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T19:15:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046953"
+                },
+                {
+                    "kinoplan_release_id": 20984,
+                    "pushkin_card": true,
+                    "datetime": "2025-01-22T20:45:00Z",
+                    "price": 350,
+                    "format_id": 1,
+                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046957"
                 },
                 {
                     "kinoplan_release_id": 17790,
@@ -658,510 +1146,6 @@
                     "price": 350,
                     "format_id": 1,
                     "external_link": "https:\/\/karofilm.ru\/order\/session\/376046958"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T13:25:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031138"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T14:50:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040322"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T16:20:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031140"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T17:45:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040327"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T19:15:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376031142"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T20:35:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040333"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-15T21:50:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376040335"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T10:30:00Z",
-                    "price": 230,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046727"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T12:00:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046732"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T13:25:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046736"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T14:55:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046739"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T16:20:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046743"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T17:50:00Z",
-                    "price": 390,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046747"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T19:15:00Z",
-                    "price": 390,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046751"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-16T20:45:00Z",
-                    "price": 390,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046755"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T10:30:00Z",
-                    "price": 230,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046761"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T12:00:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046766"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T13:25:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046770"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T14:55:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046773"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T16:20:00Z",
-                    "price": 330,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046777"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T17:50:00Z",
-                    "price": 390,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046781"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T19:15:00Z",
-                    "price": 390,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046785"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-17T20:45:00Z",
-                    "price": 390,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046789"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T10:30:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046796"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T12:10:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046800"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T13:25:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046803"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T14:55:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046806"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T16:20:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046810"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T17:50:00Z",
-                    "price": 410,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046814"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T19:15:00Z",
-                    "price": 410,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046818"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-18T20:45:00Z",
-                    "price": 410,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046822"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T10:30:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046828"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T12:00:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046833"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T13:25:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046837"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T14:55:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046840"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T16:20:00Z",
-                    "price": 360,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046844"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T17:50:00Z",
-                    "price": 410,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046848"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T19:15:00Z",
-                    "price": 410,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046852"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-19T20:45:00Z",
-                    "price": 410,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046856"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T10:30:00Z",
-                    "price": 200,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046862"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T12:00:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046867"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T13:25:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046870"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T14:55:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046873"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T16:20:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046877"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T17:50:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046881"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T19:15:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046885"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-20T20:45:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046889"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T10:30:00Z",
-                    "price": 200,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046895"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T12:00:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046900"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T13:25:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046904"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T14:55:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046907"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T16:20:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046911"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T17:50:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046915"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T19:15:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046919"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-21T20:45:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046923"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T10:30:00Z",
-                    "price": 200,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046929"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T12:00:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046934"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T13:25:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046938"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T14:55:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046941"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T16:20:00Z",
-                    "price": 250,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046945"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T17:50:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046949"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T19:15:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046953"
-                },
-                {
-                    "kinoplan_release_id": 20984,
-                    "pushkin_card": true,
-                    "datetime": "2025-01-22T20:45:00Z",
-                    "price": 350,
-                    "format_id": 1,
-                    "external_link": "https:\/\/karofilm.ru\/order\/session\/376046957"
                 },
                 {
                     "kinoplan_release_id": 20959,
