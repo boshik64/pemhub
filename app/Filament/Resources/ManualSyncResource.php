@@ -43,14 +43,13 @@ class ManualSyncResource extends Resource
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('type')->label('Тип')->sortable(),
                 Tables\Columns\TextColumn::make('status')->label('Статус')->sortable(),
-                Tables\Columns\TextColumn::make('details')->label('Детали')->limit(50),
                 Tables\Columns\TextColumn::make('created_at')->label('Создано')->dateTime(),
             ])
             ->actions([
-                Action::make('viewDetails')
+                Action::make('viewOutput')
                     ->label('Просмотр результата')
                     ->modalHeading('Результат выполнения синхронизации')
-                    ->modalContent(fn ($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output]))
+                    ->modalContent(fn ($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output])) // Передаём результат в модальное окно
                     ->button()
             ])
             ->filters([])
