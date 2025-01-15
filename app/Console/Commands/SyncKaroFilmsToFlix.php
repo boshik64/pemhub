@@ -20,7 +20,7 @@ class SyncKaroFilmsToFlix extends Command
             ->whereNotNull('site_id')
             ->where('site_id', '>', 0)
             ->whereNull('deleted_at')
-             //->whereIn('id', [4])  // Выбираем кинотеатры с id 4 для теста
+            //->whereIn('id', [4])  // Выбираем кинотеатры с id 4 для теста
             ->get(['id', 'site_id', 'flix_id', 'cinema_name', 'site_directory_id']); // Забираем сразу нужные поля
 
         foreach ($cinemas as $cinema) {
@@ -149,7 +149,7 @@ class SyncKaroFilmsToFlix extends Command
         file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
 
         $response = Http::withHeaders([
-            'App-key' => '26a830928e4641f585b03ebf87c1499f',
+            'App-key' => config('services.flix.token'),
         ])->post('https://dev-flix.infinitystudio.ru/api/schedule/', $data);
 
         // Извлекаем основные поля из JSON-ответа
