@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.text-success {
+    color: green;
+}
+.text-danger {
+    color: red;
+    font-weight: bold;
+}
