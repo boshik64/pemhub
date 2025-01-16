@@ -12,6 +12,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\ManualSyncResource\Pages\ListManualSyncs;
+use Illuminate\Support\HtmlString;
 
 class ManualSyncResource extends Resource
 {
@@ -66,7 +67,27 @@ class ManualSyncResource extends Resource
                 Action::make('viewOutput')
                     ->label('Просмотр результата')
                     ->modalHeading('Результат выполнения синхронизации')
-                    ->modalContent(fn($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output])) // Передаём результат в модальное окно
+                    ->modalContent(function ($record) {
+                        $output = json_decode($record->output, true); // Парсим JSON в массив
+                        $formattedOutput = '';
+
+                        if ($output && is_array($output)) {
+                            foreach ($output as $item) {
+                                if (isset($item['message'])) {
+                                    // Зеленый текст для "message"
+                                    $formattedOutput .= "<p style='color: green;'>{$item['message']}</p>";
+                                }
+                                if (isset($item['error']) && isset($item['cinema'])) {
+                                    // Красный текст для "error"
+                                    $formattedOutput .= "<p style='color: red;'><strong>{$item['cinema']}:</strong> {$item['error']}</p>";
+                                }
+                            }
+                        } else {
+                            $formattedOutput = "<p>Нет данных для отображения</p>";
+                        }
+
+                        return new HtmlString($formattedOutput);
+                    })
                     ->button()
             ])
             ->filters([])
