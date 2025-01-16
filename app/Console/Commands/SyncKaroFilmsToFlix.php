@@ -48,7 +48,7 @@ class SyncKaroFilmsToFlix extends Command
                     mkdir($directoryPath, 0755, true); // true позволяет создать вложенные директории
                 }
 
-                // Записываем данные в файл
+                // Записываем данные в файл 
                 file_put_contents($filePath, json_encode($formattedData, JSON_PRETTY_PRINT));
 
                 $result = $this->sendToExternalApi($formattedData, $cinema->cinema_name);
