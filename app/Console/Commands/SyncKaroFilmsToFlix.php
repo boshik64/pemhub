@@ -20,6 +20,9 @@ class SyncKaroFilmsToFlix extends Command
         $syncResults = []; // Для хранения данных по каждой отправке
         $errors = []; // Для хранения ошибок
 
+        // dd('{' . $type . '}');
+
+
         // Получаем только те cinema_id, где site_id не NULL и больше 0
         $cinemas = DB::table('cinemas')
             ->whereNotNull('site_id')
@@ -55,7 +58,7 @@ class SyncKaroFilmsToFlix extends Command
         }
 
         // Определяем статус команды
-        $status = empty($errors) ? 'success' : 'has mistakes';
+        $status = empty($errors) ? ManualSync::ACCESS : ManualSync::FAIL;
 
         // Создаём запись в базе данных
         ManualSync::create([
@@ -178,6 +181,7 @@ class SyncKaroFilmsToFlix extends Command
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
             return [
                 'success' => false,
+                'cinema' => $cinemaName,
                 'error' => $message
             ];
         }

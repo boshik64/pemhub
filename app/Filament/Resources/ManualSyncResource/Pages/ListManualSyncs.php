@@ -29,7 +29,7 @@ class ListManualSyncs extends ListRecords
     {
         try {
             // Выполнение команды
-            Artisan::call('app:sync-karo-films-to-flix {type=manual}');
+            Artisan::call('app:sync-karo-films-to-flix manual');
 
             // Отображаем уведомление об успехе
             Notification::make()

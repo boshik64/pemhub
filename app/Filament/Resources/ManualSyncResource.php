@@ -42,14 +42,29 @@ class ManualSyncResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('type')->label('Тип')->sortable(),
-                Tables\Columns\TextColumn::make('status')->label('Статус')->sortable(),
+                Tables\Columns\IconColumn::make('status')->label('Статус')
+                    ->icon(function (ManualSync $manualSync): string {
+                        if ($manualSync->status == ManualSync::ACCESS) {
+                            return 'heroicon-o-check-circle';
+                        } else {
+                            return 'heroicon-o-exclamation-circle';
+                        }
+                    })
+                    ->color(function (ManualSync $manualSync): string {
+                        if ($manualSync->status == ManualSync::ACCESS) {
+                            return 'success';
+                        } else {
+                            return 'warning';
+                        }
+                    })
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->label('Создано')->dateTime(),
             ])
             ->actions([
                 Action::make('viewOutput')
                     ->label('Просмотр результата')
                     ->modalHeading('Результат выполнения синхронизации')
-                    ->modalContent(fn ($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output])) // Передаём результат в модальное окно
+                    ->modalContent(fn($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output])) // Передаём результат в модальное окно
                     ->button()
             ])
             ->filters([])
