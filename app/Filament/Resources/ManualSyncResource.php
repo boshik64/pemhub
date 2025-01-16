@@ -42,7 +42,8 @@ class ManualSyncResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('type')->label('Тип')->sortable(),
-                Tables\Columns\IconColumn::make('status')->label('Статус')
+                Tables\Columns\IconColumn::make('status')->label('Статус')->sortable()
+
                     ->icon(function (ManualSync $manualSync): string {
                         if ($manualSync->status == ManualSync::ACCESS) {
                             return 'heroicon-o-check-circle';
@@ -60,6 +61,7 @@ class ManualSyncResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->label('Создано')->dateTime(),
             ])
+            ->defaultSort('id', 'desc')
             ->actions([
                 Action::make('viewOutput')
                     ->label('Просмотр результата')
