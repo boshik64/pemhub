@@ -41,6 +41,14 @@ class SyncKaroFilmsToFlix extends Command
                 $data = $response->json();
                 $formattedData = $this->transformData($cinema, $data);
                 $filePath = base_path("Karo_post_logs/{$cinema->cinema_name}.json");
+                $directoryPath = base_path('Karo_post_logs');
+
+                // Проверяем, существует ли директория, и создаём её при необходимости
+                if (!is_dir($directoryPath)) {
+                    mkdir($directoryPath, 0755, true); // true позволяет создать вложенные директории
+                }
+
+                // Записываем данные в файл
                 file_put_contents($filePath, json_encode($formattedData, JSON_PRETTY_PRINT));
 
                 $result = $this->sendToExternalApi($formattedData, $cinema->cinema_name);
