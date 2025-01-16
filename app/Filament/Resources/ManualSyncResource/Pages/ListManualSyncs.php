@@ -29,19 +29,7 @@ class ListManualSyncs extends ListRecords
     {
         try {
             // Выполнение команды
-            Artisan::call('app:sync-karo-films-to-flix');
-            $output = Artisan::output(); // Получаем вывод команды
-
-            // Подсвечиваем ошибку в выводе
-            $output = preg_replace('/(Ошибка отправки POST-запроса)/', '<span style="color: red; font-weight: bold;">$1</span>', $output);
-
-            // Сохраняем результат в базу данных
-            ManualSync::create([
-                'type' => 'manual',
-                'status' => 'completed', // Устанавливаем статус "completed"
-                'details' => 'Синхронизация завершена', // Статус для details
-                'output' => $output, // Сохраняем вывод команды с подсветкой
-            ]);
+            Artisan::call('app:sync-karo-films-to-flix {type=manual}');
 
             // Отображаем уведомление об успехе
             Notification::make()
@@ -64,7 +52,7 @@ class ListManualSyncs extends ListRecords
     {
         return $this->modal()
             ->title('Результат выполнения синхронизации')
-            ->body(fn () => view('filament.resources.manual-syncs.modal', ['output' => $record->output]))  // Указываем кастомное содержимое
+            ->body(fn() => view('filament.resources.manual-syncs.modal', ['output' => $record->output]))  // Указываем кастомное содержимое
             ->open();
     }
 }

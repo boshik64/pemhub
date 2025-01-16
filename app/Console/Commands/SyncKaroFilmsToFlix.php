@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ManualSync;
 use DB;
 use Http;
 use Illuminate\Console\Command;
@@ -10,44 +11,62 @@ use Carbon\Carbon;
 
 class SyncKaroFilmsToFlix extends Command
 {
-    protected $signature = 'app:sync-karo-films-to-flix';
+    protected $signature = 'app:sync-karo-films-to-flix {type=manual}'; // Добавляем аргумент "type" с значением по умолчанию "manual"
     protected $description = 'Синхронизация данных KaroFilms с Flix';
 
     public function handle()
     {
+        $type = $this->argument('type'); // Получаем тип команды
+        $syncResults = []; // Для хранения данных по каждой отправке
+        $errors = []; // Для хранения ошибок
+
         // Получаем только те cinema_id, где site_id не NULL и больше 0
         $cinemas = DB::table('cinemas')
             ->whereNotNull('site_id')
-            ->where('site_id', '>', 0)
             ->whereNull('deleted_at')
-            //->whereIn('id', [4])  // Выбираем кинотеатры с id 4 для теста
-            ->get(['id', 'site_id', 'flix_id', 'cinema_name', 'site_directory_id']); // Забираем сразу нужные поля
+            ->where('site_id', '>', 0)
+            ->get(['id', 'site_id', 'flix_id', 'cinema_name', 'site_directory_id']);
 
         foreach ($cinemas as $cinema) {
-            $this->info("Обрабатываем кинотеатр ID:{$cinema->site_id} {$cinema->cinema_name}");
+            $this->info("Обрабатываем кинотеатр ID: {$cinema->site_id} {$cinema->cinema_name}");
 
-            // Выполняем запрос к API для получения расписания для всех фильмов в кинотеатре
             $response = Http::get("https://api.karofilm.ru/cinema-schedule", [
                 'cinema_id' => $cinema->site_id,
             ]);
 
             if ($response->successful()) {
                 $data = $response->json();
-
-                // Преобразование данных
                 $formattedData = $this->transformData($cinema, $data);
+                $filePath = base_path("Karo_post_logs/{$cinema->cinema_name}.json");
+                file_put_contents($filePath, json_encode($formattedData, JSON_PRETTY_PRINT));
 
-                $this->info("Данные для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name} успешно обработаны.");
+                $result = $this->sendToExternalApi($formattedData, $cinema->cinema_name);
+                $syncResults[] = $result;
 
-                // Отправляем POST-запрос с данными
-                $this->sendToExternalApi($formattedData, $cinema->cinema_name);
+                // Добавляем ошибку, если запрос завершился неудачно
+                if (!$result['success']) {
+                    $errors[] = $result['error'];
+                }
             } else {
-                $this->error("Ошибка запроса для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name}");
+                $errorMessage = "Ошибка запроса для кинотеатра ID: {$cinema->site_id} {$cinema->cinema_name}";
+                $this->error($errorMessage);
+                $errors[] = ['cinema_name' => $cinema->cinema_name, 'error' => $errorMessage];
             }
         }
 
-        $this->info("Обработка завершена.");
+        // Определяем статус команды
+        $status = empty($errors) ? 'success' : 'has mistakes';
+
+        // Создаём запись в базе данных
+        ManualSync::create([
+            'type' => $type,
+            'status' => $status,
+            'output' => json_encode($syncResults, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
+        ]);
+
+        $this->info("Синхронизация завершена. Тип команды: {$type}. Статус: {$status}");
     }
+
 
     /**
      * Преобразование данных для одного кинотеатра.
@@ -135,41 +154,35 @@ class SyncKaroFilmsToFlix extends Command
         return $directoryData; // Возвращаем данные для всех фильмов
     }
 
-    private function sendToExternalApi(array $data, string $cinemaName): void
+    private function sendToExternalApi(array $data, string $cinemaName): array
     {
-        // Создаём имя файла на основе имени кинотеатра
-        $filePath = base_path("Karo_post_logs/{$cinemaName}_post_data.json");
-
-        // Проверяем, существует ли директория. Если нет — создаём её.
-        if (!is_dir(dirname($filePath))) {
-            mkdir(dirname($filePath), 0777, true); // Создаём директорию с рекурсией
-        }
-
-        // Записываем данные, отправляемые в POST-запрос, в JSON-файл
-        file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
-
         $response = Http::withHeaders([
             'App-key' => config('services.flix.token'),
         ])->post('https://dev-flix.infinitystudio.ru/api/schedule/', $data);
 
-        // Извлекаем основные поля из JSON-ответа
         $responseBody = $response->json();
-        $status = $responseBody['status'] ?? 'unknown'; // Извлекаем 'status', если есть
+        $status = $responseBody['status'] ?? 'unknown';
         $message = isset($responseBody['message'])
-            ? (is_array($responseBody['message']) ? json_encode($responseBody['message']) : $responseBody['message']) // Преобразуем массив в строку
+            ? (is_array($responseBody['message']) ? json_encode($responseBody['message']) : $responseBody['message'])
             : 'No message provided';
         $details = isset($responseBody['details']) && is_array($responseBody['details'])
-            ? json_encode($responseBody['details'], JSON_PRETTY_PRINT) // Преобразуем массив в строку
+            ? json_encode($responseBody['details'], JSON_PRETTY_PRINT)
             : 'No details provided';
 
         if ($response->successful() && $status === 'success') {
-            Log::info("POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}");
+            return [
+                'success' => true,
+                'message' => "POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}",
+            ];
         } else {
-            // Логируем ошибку, если статус не "success" или если запрос не успешен
-            $this->error("Ошибка отправки POST-запроса для {$cinemaName}. Статус: {$status}. Смотрите логи!");
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
+            return [
+                'success' => false,
+                'error' => $message
+            ];
         }
     }
+
 
 }
 
