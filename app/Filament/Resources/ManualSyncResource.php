@@ -4,16 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Models\ManualSync;
 use App\Filament\Resources\ManualSyncResource\Pages;
-use App\Filament\Resources\CinemaResource\RelationManagers;
-use App\Models\Cinema;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ManualSyncResource\Pages\ListManualSyncs;
 
 class ManualSyncResource extends Resource
 {
@@ -44,12 +42,32 @@ class ManualSyncResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('type')->label('Тип')->sortable(),
-                Tables\Columns\TextColumn::make('status')->label('Статус')->sortable(),
-                Tables\Columns\TextColumn::make('details')->label('Детали')->limit(50),
+                Tables\Columns\IconColumn::make('status')->label('Статус')
+                    ->icon(function (ManualSync $manualSync): string {
+                        if ($manualSync->status == ManualSync::ACCESS) {
+                            return 'heroicon-o-check-circle';
+                        } else {
+                            return 'heroicon-o-exclamation-circle';
+                        }
+                    })
+                    ->color(function (ManualSync $manualSync): string {
+                        if ($manualSync->status == ManualSync::ACCESS) {
+                            return 'success';
+                        } else {
+                            return 'warning';
+                        }
+                    })
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->label('Создано')->dateTime(),
             ])
+            ->actions([
+                Action::make('viewOutput')
+                    ->label('Просмотр результата')
+                    ->modalHeading('Результат выполнения синхронизации')
+                    ->modalContent(fn($record) => view('filament.resources.manual-syncs.modal', ['output' => $record->output])) // Передаём результат в модальное окно
+                    ->button()
+            ])
             ->filters([])
-            ->actions([])
             ->bulkActions([]);
     }
 

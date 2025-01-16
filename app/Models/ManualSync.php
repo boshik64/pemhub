@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class ManualSync extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'type',
         'status',
-        'details'
+        'details',
+        'output',
     ];
+    const ACCESS = 0;
+    const FAIL = 1;
 }

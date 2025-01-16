@@ -1,80 +1,58 @@
 <?php
-
 namespace App\Filament\Resources\ManualSyncResource\Pages;
 
-use Filament\Facades\Notification;
 use App\Filament\Resources\ManualSyncResource;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Pages\Actions\Action;
-use Illuminate\Support\Facades\Artisan;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Action as TableAction;
+use Filament\Forms\Components\Modal; // Не нужно, убираем это
 use App\Models\ManualSync;
-
-use Filament\Notifications\Notification as FilamentNotification;
-
-
-
-
+use Illuminate\Support\Facades\Artisan;
+use Filament\Notifications\Notification;
 
 
 class ListManualSyncs extends ListRecords
 {
     protected static string $resource = ManualSyncResource::class;
-
-    protected function getActions(): array
+    // Определяем действия на странице
+    public function getActions(): array
     {
         return [
             Action::make('sync')
-                ->label('Выполнить синхронизацию')
-                ->color('primary')
-                ->icon('heroicon-o-arrow-path')
-                ->action(function () {
-                    try {
-                        // Вызов команды Artisan для выполнения синхронизации
-                        $exitCode = Artisan::call('app:sync-karo-films-to-flix ');
-
-                        // Проверка успешности выполнения команды
-                        if ($exitCode === 0) {
-                            // Логирование успешной синхронизации
-                            ManualSync::create([
-                                'type' => 'manual',
-                                'status' => 'completed',
-                                'details' => 'Синхронизация успешно завершена',
-                            ]);
-
-                            // Уведомление об успешной синхронизации через Filament
-                            FilamentNotification::make()
-                                ->title('Синхронизация успешно завершена!')
-                                ->success()
-                                ->send();
-                        } else {
-                            // Логирование ошибки синхронизации
-                            ManualSync::create([
-                                'type' => 'manual',
-                                'status' => 'failed',
-                                'details' => 'Ошибка при выполнении синхронизации',
-                            ]);
-
-                            // Уведомление об ошибке через Filament
-                            FilamentNotification::make()
-                                ->title('Ошибка синхронизации')
-                                ->danger()
-                                ->send();
-                        }
-                    } catch (\Exception $e) {
-                        // Логирование ошибки синхронизации
-                        ManualSync::create([
-                            'type' => 'manual',
-                            'status' => 'failed',
-                            'details' => $e->getMessage(),
-                        ]);
-
-                        // Уведомление об ошибке через Filament
-                        FilamentNotification::make()
-                            ->title('Ошибка синхронизации: ' . $e->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
+                ->label('Запустить синхронизацию')
+                ->action('sync') // Указываем метод sync
+                ->icon('heroicon-o-rectangle-stack')
+                ->color('primary'),
         ];
+    }
+    public function sync(): void
+    {
+        try {
+            // Выполнение команды
+            Artisan::call('app:sync-karo-films-to-flix manual');
+
+            // Отображаем уведомление об успехе
+            Notification::make()
+                ->title('Синхронизация выполнена')
+                ->success()
+                ->body('Результат выполнения команды сохранён в базу данных.')
+                ->send();
+        } catch (\Exception $e) {
+            // Отображаем уведомление об ошибке
+            Notification::make()
+                ->title('Ошибка синхронизации!')
+                ->danger()
+                ->body($e->getMessage())
+                ->send();
+        }
+    }
+
+    // Метод для отображения модального окна с результатом
+    public function viewOutput(ManualSync $record)
+    {
+        return $this->modal()
+            ->title('Результат выполнения синхронизации')
+            ->body(fn() => view('filament.resources.manual-syncs.modal', ['output' => $record->output]))  // Указываем кастомное содержимое
+            ->open();
     }
 }
