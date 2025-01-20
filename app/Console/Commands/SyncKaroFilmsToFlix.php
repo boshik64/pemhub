@@ -169,7 +169,7 @@ class SyncKaroFilmsToFlix extends Command
     {
         $response = Http::withHeaders([
             'App-key' => config('services.flix.token'),
-        ])->post('https://dev-flix.infinitystudio.ru/api/schedule/', $data);
+        ])->post(config('services.flix.url') . '/api/schedule/', $data);
 
         $responseBody = $response->json();
         $status = $responseBody['status'] ?? 'unknown';
