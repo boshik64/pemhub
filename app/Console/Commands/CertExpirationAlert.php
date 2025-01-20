@@ -61,7 +61,6 @@ class CertExpirationAlert extends Command
                 $message .= $merchant->mid . ' ❗️ ' . $merchant->department_name . ' 🕕 ' . 'Осталось: ' . Carbon::now()->diffInDays($merchant->next_update) . 'д.' . PHP_EOL;
             }
         }
-//        dd($message);
         $this->sendToTelegram($message);
     }
 

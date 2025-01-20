@@ -167,6 +167,7 @@ class SyncKaroFilmsToFlix extends Command
 
     private function sendToExternalApi(array $data, string $cinemaName): array
     {
+        $telegram_message = '';
         $response = Http::withHeaders([
             'App-key' => config('services.flix.token'),
         ])->post(config('services.flix.url') . '/api/schedule/', $data);
@@ -186,6 +187,8 @@ class SyncKaroFilmsToFlix extends Command
                 'message' => "POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}",
             ];
         } else {
+            $telegram_message .= "🛑 POST-запрос для {$cinemaName} завершился с ошибкой." . PHP_EOL . "<b>Статус:</b> {$status}. Message: {$message}." . PHP_EOL . "<b>Details: </b> {$details}" . PHP_EOL . "<a href=\"http://ecom.karofilm.ru/\">ECOM</a>" . PHP_EOL;
+            $this->sendToTelegram($telegram_message);
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
             return [
                 'success' => false,
@@ -194,6 +197,23 @@ class SyncKaroFilmsToFlix extends Command
             ];
         }
     }
+
+    public function sendToTelegram(string $message)
+    {
+        $telegramToken = config('services.telegram.token');
+        $chats = config('services.telegram.chats');
+        $apiUrl = "https://api.telegram.org/bot$telegramToken/sendMessage";
+
+        foreach ($chats as $chat_id) {
+            Http::post($apiUrl, [
+                'text' => $message,
+                'chat_id' => $chat_id,
+                'parse_mode' => 'html'
+            ]);
+        }
+    }
+
+
 
 
 }
