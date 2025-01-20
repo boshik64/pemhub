@@ -36,6 +36,7 @@ return [
         'chats' => [731655828, 636577264, -1002092160461],
     ],
     'flix' => [
+        'url' => env('FLIX_URL'),
         'token' => env('FLIX_TOKEN'),
     ]
 ];
