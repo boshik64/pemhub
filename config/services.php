@@ -38,5 +38,19 @@ return [
     'flix' => [
         'url' => env('FLIX_URL'),
         'token' => env('FLIX_TOKEN'),
-    ]
+    ],
+    'alert_telegram' => [
+        'token' => env('ALERT_TELEGRAM_BOT_TOKEN'),
+        'chats' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_CHAT_IDS', '')))),
+    ],
+    'ssh_tunnel' => [
+        'host' => env('SSH_TUNNEL_HOST'),
+        'port' => env('SSH_TUNNEL_PORT', '22'),
+        'user' => env('SSH_TUNNEL_USER'),
+        'key_path' => env('SSH_TUNNEL_KEY_PATH'),
+        'password' => env('SSH_TUNNEL_PASSWORD'),
+        'remote_db_host' => env('SSH_TUNNEL_REMOTE_DB_HOST', '127.0.0.1'),
+        'remote_db_port' => env('SSH_TUNNEL_REMOTE_DB_PORT', '3306'),
+        'local_port' => env('SSH_TUNNEL_LOCAL_PORT', '13306'),
+    ],
 ];

@@ -93,6 +93,21 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'external_karo' => [
+            'driver' => 'mysql',
+            'host' => env('EXTERNAL_KARO_DB_HOST', '127.0.0.1'),
+            'port' => env('EXTERNAL_KARO_DB_PORT', '13306'),
+            'database' => env('EXTERNAL_KARO_DB_DATABASE', 'karo'),
+            'username' => env('EXTERNAL_KARO_DB_USERNAME'),
+            'password' => env('EXTERNAL_KARO_DB_PASSWORD'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+        ],
+
     ],
 
     /*

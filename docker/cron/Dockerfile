@@ -4,7 +4,9 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     libzip-dev \
-    zip unzip libicu-dev procps cron
+    zip unzip libicu-dev procps cron \
+    openssh-client \
+    sshpass
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql zip intl exif pcntl

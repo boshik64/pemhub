@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('cert:alert')->daily();
         //        $schedule->command('cert:test-msg')->everyMinute();
         $schedule->command('app:sync-karo-films-to-flix auto')->hourly();
+        $schedule->command('check:external-alerts')->dailyAt('11:00')->timezone('Europe/Moscow');
     }
 
     /**
