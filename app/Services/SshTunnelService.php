@@ -71,11 +71,25 @@ class SshTunnelService
                 'port' => $this->localPort,
             ]);
             $this->killTunnelProcesses();
-            sleep(2);
+            // Увеличиваем время ожидания для освобождения порта
+            sleep(3);
             
-            // Проверяем снова
+            // Проверяем снова несколько раз
+            $maxRetries = 3;
+            $retry = 0;
+            while ($this->isPortInUse($this->localPort) && $retry < $maxRetries) {
+                $retry++;
+                Log::warning('Порт все еще занят, повторная попытка очистки', [
+                    'port' => $this->localPort,
+                    'retry' => $retry,
+                ]);
+                $this->killTunnelProcesses();
+                sleep(2);
+            }
+            
+            // Финальная проверка
             if ($this->isPortInUse($this->localPort)) {
-                throw new Exception("Локальный порт {$this->localPort} уже занят. Попробуйте выполнить команду через несколько секунд.");
+                throw new Exception("Локальный порт {$this->localPort} уже занят после попыток очистки. Возможно, порт используется другим процессом.");
             }
         }
 
@@ -187,31 +201,62 @@ class SshTunnelService
      */
     private function killTunnelProcesses(): void
     {
-        // Ищем процессы SSH, использующие наш локальный порт
-        $command = "ps aux | grep 'ssh.*{$this->localPort}' | grep -v grep | awk '{print \$2}'";
-        $output = [];
-        $returnVar = 0;
-        @exec($command, $output, $returnVar);
+        $killedPids = [];
         
-        foreach ($output as $pid) {
-            $pid = trim($pid);
-            if (is_numeric($pid) && $pid > 0) {
-                @exec("kill -9 {$pid} 2>/dev/null");
-                Log::info('Убит SSH процесс', ['pid' => $pid, 'port' => $this->localPort]);
+        // Ищем все процессы, связанные с SSH и нашим портом
+        // Используем более широкий поиск
+        $commands = [
+            "ps aux | grep -E 'ssh.*{$this->localPort}|sshpass.*{$this->localPort}' | grep -v grep",
+            "lsof -ti:{$this->localPort} 2>/dev/null",
+            "fuser {$this->localPort}/tcp 2>/dev/null",
+        ];
+        
+        foreach ($commands as $command) {
+            $output = [];
+            $returnVar = 0;
+            @exec($command, $output, $returnVar);
+            
+            foreach ($output as $line) {
+                // Извлекаем PID из разных форматов вывода
+                if (preg_match('/\b(\d+)\b/', $line, $matches)) {
+                    $pid = trim($matches[1]);
+                    if (is_numeric($pid) && $pid > 0 && !in_array($pid, $killedPids)) {
+                        // Пытаемся убить процесс
+                        @exec("kill -9 {$pid} 2>/dev/null", $killOutput, $killReturn);
+                        $killedPids[] = $pid;
+                        Log::info('Попытка убить процесс', [
+                            'pid' => $pid,
+                            'port' => $this->localPort,
+                            'command' => $command,
+                        ]);
+                    }
+                }
             }
         }
         
-        // Также убиваем sshpass процессы, если они есть
-        $command = "ps aux | grep 'sshpass.*{$this->localPort}' | grep -v grep | awk '{print \$2}'";
-        $output = [];
-        @exec($command, $output, $returnVar);
+        // Дополнительно: убиваем все ssh и sshpass процессы, связанные с нашим хостом
+        $hostPattern = escapeshellarg($this->sshHost);
+        $commands = [
+            "ps aux | grep -E 'ssh.*{$hostPattern}|sshpass.*{$hostPattern}' | grep -v grep | awk '{print \$2}'",
+        ];
         
-        foreach ($output as $pid) {
-            $pid = trim($pid);
-            if (is_numeric($pid) && $pid > 0) {
-                @exec("kill -9 {$pid} 2>/dev/null");
-                Log::info('Убит sshpass процесс', ['pid' => $pid, 'port' => $this->localPort]);
+        foreach ($commands as $command) {
+            $output = [];
+            @exec($command, $output);
+            foreach ($output as $pid) {
+                $pid = trim($pid);
+                if (is_numeric($pid) && $pid > 0 && !in_array($pid, $killedPids)) {
+                    @exec("kill -9 {$pid} 2>/dev/null");
+                    $killedPids[] = $pid;
+                }
             }
+        }
+        
+        if (!empty($killedPids)) {
+            Log::info('Убиты процессы SSH туннеля', [
+                'pids' => $killedPids,
+                'port' => $this->localPort,
+            ]);
         }
     }
 
@@ -352,11 +397,26 @@ class SshTunnelService
      */
     private function isPortInUse(string $port): bool
     {
+        // Проверка через fsockopen
         $connection = @fsockopen('127.0.0.1', $port, $errno, $errstr, 1);
         if ($connection) {
             fclose($connection);
             return true;
         }
+        
+        // Дополнительная проверка через lsof (если доступен)
+        $output = [];
+        @exec("lsof -ti:{$port} 2>/dev/null", $output);
+        if (!empty($output)) {
+            return true;
+        }
+        
+        // Проверка через fuser (если доступен)
+        @exec("fuser {$port}/tcp 2>/dev/null", $output, $returnVar);
+        if ($returnVar === 0) {
+            return true;
+        }
+        
         return false;
     }
 
