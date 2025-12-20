@@ -159,7 +159,7 @@ class AlertTelegramService
             return '';
         }
 
-        $message = "⚠️⚠️⚠️ <b>Незавершенные задачи заказов</b>\n\n";
+        $message = "⚠️⚠️⚠️ <b>Незавершенные задачи заказов (За последние 3 дня)</b>\n\n";
 
         foreach ($tasks as $task) {
             $bookingId = $task['booking_id'] ?? 'N/A';
@@ -186,7 +186,7 @@ class AlertTelegramService
             return '';
         }
 
-        $message = "❗️❗️❗️ <b>Незавершенные автовозвраты из формы</b>\n\n";
+        $message = "❗️❗️❗️ <b>Незавершенные автовозвраты из формы (За последние 3 дня)</b>\n\n";
 
         foreach ($refunds as $refund) {
             $bookingId = $refund['booking_id'] ?? 'N/A';
