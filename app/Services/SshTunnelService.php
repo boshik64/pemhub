@@ -66,7 +66,17 @@ class SshTunnelService
 
         // Проверяем, что локальный порт свободен
         if ($this->isPortInUse($this->localPort)) {
-            throw new Exception("Локальный порт {$this->localPort} уже занят");
+            // Пытаемся убить висячие процессы перед созданием нового туннеля
+            Log::warning('Локальный порт занят, пытаемся очистить висячие процессы', [
+                'port' => $this->localPort,
+            ]);
+            $this->killTunnelProcesses();
+            sleep(2);
+            
+            // Проверяем снова
+            if ($this->isPortInUse($this->localPort)) {
+                throw new Exception("Локальный порт {$this->localPort} уже занят. Попробуйте выполнить команду через несколько секунд.");
+            }
         }
 
         $command = $this->buildSshCommand();
@@ -145,10 +155,63 @@ class SshTunnelService
     public function closeTunnel(): void
     {
         if (is_resource($this->tunnelProcess)) {
-            proc_terminate($this->tunnelProcess);
+            // Сначала пытаемся корректно завершить процесс
+            $status = proc_get_status($this->tunnelProcess);
+            if ($status && $status['running']) {
+                proc_terminate($this->tunnelProcess, SIGTERM);
+                // Даем время на корректное завершение
+                sleep(1);
+                
+                // Проверяем, завершился ли процесс
+                $status = proc_get_status($this->tunnelProcess);
+                if ($status && $status['running']) {
+                    // Принудительно убиваем, если не завершился
+                    proc_terminate($this->tunnelProcess, SIGKILL);
+                    sleep(1);
+                }
+            }
             proc_close($this->tunnelProcess);
             $this->tunnelProcess = null;
-            Log::info('SSH туннель закрыт');
+        }
+        
+        // Дополнительно убиваем все SSH процессы, использующие этот порт
+        $this->killTunnelProcesses();
+        
+        Log::info('SSH туннель закрыт', ['local_port' => $this->localPort]);
+    }
+
+    /**
+     * Убивает все SSH процессы, использующие локальный порт
+     *
+     * @return void
+     */
+    private function killTunnelProcesses(): void
+    {
+        // Ищем процессы SSH, использующие наш локальный порт
+        $command = "ps aux | grep 'ssh.*{$this->localPort}' | grep -v grep | awk '{print \$2}'";
+        $output = [];
+        $returnVar = 0;
+        @exec($command, $output, $returnVar);
+        
+        foreach ($output as $pid) {
+            $pid = trim($pid);
+            if (is_numeric($pid) && $pid > 0) {
+                @exec("kill -9 {$pid} 2>/dev/null");
+                Log::info('Убит SSH процесс', ['pid' => $pid, 'port' => $this->localPort]);
+            }
+        }
+        
+        // Также убиваем sshpass процессы, если они есть
+        $command = "ps aux | grep 'sshpass.*{$this->localPort}' | grep -v grep | awk '{print \$2}'";
+        $output = [];
+        @exec($command, $output, $returnVar);
+        
+        foreach ($output as $pid) {
+            $pid = trim($pid);
+            if (is_numeric($pid) && $pid > 0) {
+                @exec("kill -9 {$pid} 2>/dev/null");
+                Log::info('Убит sshpass процесс', ['pid' => $pid, 'port' => $this->localPort]);
+            }
         }
     }
 
@@ -302,7 +365,14 @@ class SshTunnelService
      */
     public function __destruct()
     {
-        $this->closeTunnel();
+        try {
+            $this->closeTunnel();
+        } catch (\Exception $e) {
+            // Игнорируем ошибки в деструкторе, но логируем
+            Log::warning('Ошибка при закрытии туннеля в деструкторе', [
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
 
