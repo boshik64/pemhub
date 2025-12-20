@@ -187,7 +187,7 @@ class SyncKaroFilmsToFlix extends Command
                 'message' => "POST-запрос для {$cinemaName} завершился успешно. Статус: {$status}",
             ];
         } else {
-            $telegram_message .= "🛑 POST-запрос для <b>{$cinemaName}</b> завершился с ошибкой." . PHP_EOL . "<b>Status:</b> {$status}. " . PHP_EOL . "<b>Message:</b> {$message}." . PHP_EOL . "<b>Details: </b> {$details}" . PHP_EOL . "<a href=\"http://ecom.karofilm.ru/\">ECOM</a>" . PHP_EOL;
+            $telegram_message .= "🛑 POST-запрос для <b>{$cinemaName}</b> завершился с ошибкой." . PHP_EOL . "<b>Status:</b> {$status}. " . PHP_EOL . "<a href=\"http://ecom.karofilm.ru/\">ECOM</a>" . PHP_EOL;
             $this->sendToTelegram($telegram_message);
             Log::error("POST-запрос для {$cinemaName} завершился с ошибкой. Статус: {$status}. Message: {$message}. Details: {$details}");
             return [
