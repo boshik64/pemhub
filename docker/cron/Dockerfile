@@ -28,4 +28,4 @@ RUN touch /var/log/cron.log
 # Set working directory
 WORKDIR /app
 
-CMD cron && tail -f /var/log/cron.log
+CMD ["sh", "-c", "cron && tail -f /var/log/cron.log"]

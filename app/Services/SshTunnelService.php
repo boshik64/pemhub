@@ -19,23 +19,37 @@ class SshTunnelService
 
     public function __construct()
     {
-        $this->sshHost = config('services.ssh_tunnel.host');
-        $this->sshUser = config('services.ssh_tunnel.user');
-        $this->sshPort = config('services.ssh_tunnel.port', '22');
-        $this->remoteHost = config('services.ssh_tunnel.remote_db_host', '127.0.0.1');
-        $this->remotePort = config('services.ssh_tunnel.remote_db_port', '3306');
-        $this->localPort = config('services.ssh_tunnel.local_port', '13306');
-        $this->sshKeyPath = config('services.ssh_tunnel.key_path');
-        $this->sshPassword = config('services.ssh_tunnel.password');
+        $sshHost = config('services.ssh_tunnel.host');
+        $sshUser = config('services.ssh_tunnel.user');
+        $sshPort = config('services.ssh_tunnel.port', '22');
+        $remoteHost = config('services.ssh_tunnel.remote_db_host', '127.0.0.1');
+        $remotePort = config('services.ssh_tunnel.remote_db_port', '3306');
+        $localPort = config('services.ssh_tunnel.local_port', '13306');
+        $sshKeyPath = config('services.ssh_tunnel.key_path');
+        $sshPassword = config('services.ssh_tunnel.password');
 
         // Валидация конфигурации
-        if (empty($this->sshHost) || empty($this->sshUser)) {
-            throw new Exception('SSH туннель не настроен: требуется SSH_TUNNEL_HOST и SSH_TUNNEL_USER');
+        if (empty($sshHost)) {
+            throw new Exception('SSH туннель не настроен: требуется SSH_TUNNEL_HOST в .env файле');
         }
 
-        if (empty($this->sshKeyPath) && empty($this->sshPassword)) {
-            throw new Exception('SSH туннель не настроен: требуется SSH_TUNNEL_KEY_PATH или SSH_TUNNEL_PASSWORD');
+        if (empty($sshUser)) {
+            throw new Exception('SSH туннель не настроен: требуется SSH_TUNNEL_USER в .env файле');
         }
+
+        if (empty($sshKeyPath) && empty($sshPassword)) {
+            throw new Exception('SSH туннель не настроен: требуется SSH_TUNNEL_KEY_PATH или SSH_TUNNEL_PASSWORD в .env файле');
+        }
+
+        // Присваиваем значения только после валидации
+        $this->sshHost = $sshHost;
+        $this->sshUser = $sshUser;
+        $this->sshPort = $sshPort;
+        $this->remoteHost = $remoteHost;
+        $this->remotePort = $remotePort;
+        $this->localPort = $localPort;
+        $this->sshKeyPath = $sshKeyPath;
+        $this->sshPassword = $sshPassword;
     }
 
     /**
