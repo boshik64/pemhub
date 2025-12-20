@@ -33,7 +33,7 @@ return [
 
     'telegram' => [
         'token' => env('TELEGRAM_BOT_TOKEN'),
-        'chats' => [731655828, 636577264, -1002092160461],
+        'chats' => [-1002092160461],
     ],
     'flix' => [
         'url' => env('FLIX_URL'),
