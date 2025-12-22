@@ -194,10 +194,15 @@ class AlertTelegramService
             $client = $refund['client'] ?? 'N/A';
             $email = $refund['email'] ?? 'N/A';
             $phone = $refund['phone'] ?? 'N/A';
+            $createdAt = $refund['created_at'] ?? 'N/A';
 
-            $message .= "Автовозврат для <b>{$bookingId}</b> из формы возврата не сменил статус на FINISHED.\n";
-            $message .= "Данные по заказу:\n";
-            $message .= "Кинотеатр <b>{$theatreName}</b>, client <b>{$client}</b>, email <b>{$email}</b>, Телефон <b>{$phone}</b>.\n\n";
+            $message .= "<b>🎫Данные по заказу:</b>\n";
+            $message .= "Дата создания: <b>{$createdAt}</b>\n";
+            $message .= "ID заказа: <b>{$bookingId}</b>\n";
+            $message .= "Кинотеатр: <b>{$theatreName}</b>\n";
+            $message .= "Канал продаж: <b>{$client}</b>\n";
+            $message .= "Email: <b>{$email}</b>\n";
+            $message .= "Телефон: <b>+7{$phone}</b>\n\n";
         }
 
         return $message;
