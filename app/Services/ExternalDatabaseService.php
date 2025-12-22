@@ -99,6 +99,7 @@ class ExternalDatabaseService
                 ot.created_at, 
                 ot.finished_at, 
                 o.booking_id, 
+                o.`key` ,
                 t.name, 
                 vc.vista_cinema_id
             FROM karo.order_task AS ot

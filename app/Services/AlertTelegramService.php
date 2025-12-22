@@ -159,16 +159,24 @@ class AlertTelegramService
             return '';
         }
 
-        $message = "⚠️⚠️⚠️ <b>Незавершенные задачи заказов (За последние 3 дня)</b>\n\n";
+        $message = "⚠️⚠️⚠️ <b>Отложенные возвраты (За последние 3 дня)</b>\n\n";
 
         foreach ($tasks as $task) {
             $bookingId = $task['booking_id'] ?? 'N/A';
             $theatreName = $task['name'] ?? 'N/A';
             $vistaCinemaId = $task['vista_cinema_id'] ?? 'N/A';
             $taskType = $task['task'] ?? 'N/A';
+            $key = $task['key'] ?? 'N/A';
+            $createdAt = $task['created_at'] ?? 'N/A';
 
-            $message .= "Заказ с кодом брони <b>{$bookingId}</b> в кинотеатре <b>{$theatreName}</b>, {$vistaCinemaId}\n";
-            $message .= "из списка на отложенный возврат с типом <b>{$taskType}</b> — НЕ ЗАВЕРШЕН!\n\n";
+
+            $message .= "<b>🔙 Данные по возврату:</b>\n";
+            $message .= "Дата создания: <b>{$createdAt}</b>\n";
+            $message .= "Код брони: <b>{$bookingId}</b>\n";
+            $message .= "Кинотеатр: <b>{$theatreName}</b>\n";
+            $message .= "Vista Cinema ID: <b>{$vistaCinemaId}</b>\n";
+            $message .= "Тип задачи: <b>{$taskType}</b>\n";
+            $message .= "Ключ заказа: <b>{$key}</b>\n\n";
         }
 
         return $message;
@@ -196,7 +204,7 @@ class AlertTelegramService
             $phone = $refund['phone'] ?? 'N/A';
             $createdAt = $refund['created_at'] ?? 'N/A';
 
-            $message .= "<b>🎫Данные по заказу:</b>\n";
+            $message .= "<b>🎫 Данные по заказу:</b>\n";
             $message .= "Дата создания: <b>{$createdAt}</b>\n";
             $message .= "ID заказа: <b>{$bookingId}</b>\n";
             $message .= "Кинотеатр: <b>{$theatreName}</b>\n";
