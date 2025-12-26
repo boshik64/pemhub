@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DateTime;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -159,7 +160,9 @@ class AlertTelegramService
             return '';
         }
 
-        $message = "⚠️⚠️⚠️ <b>Отложенные возвраты (За последние 3 дня)</b>\n\n";
+        $yesterdayDate = (new DateTime('yesterday'))->format('d.m.Y');
+
+        $message = "⚠️ <b>Отложенные возвраты за {$yesterdayDate}</b>\n\n";
 
         foreach ($tasks as $task) {
             $bookingId = $task['booking_id'] ?? 'N/A';
@@ -194,8 +197,10 @@ class AlertTelegramService
             return '';
         }
 
-        $message = "❗️❗️❗️ <b>Незавершенные автовозвраты из формы (За последние 3 дня)</b>\n\n";
+        $yesterdayDate = (new DateTime('yesterday'))->format('d.m.Y');
 
+        $message = "❗️ <b>Незавершенные автовозвраты из формы за {$yesterdayDate}</b>\n\n";
+    
         foreach ($refunds as $refund) {
             $bookingId = $refund['booking_id'] ?? 'N/A';
             $theatreName = $refund['name'] ?? 'N/A';
