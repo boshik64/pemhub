@@ -108,7 +108,8 @@ class ExternalDatabaseService
             LEFT JOIN karo.vista_cinema AS vc ON vc.theatre_id = o.theatre_id
             WHERE ot.finished_at IS NULL
               AND ot.task = 'postcharge_refund'
-              AND ot.created_at >= DATE_SUB(NOW(), INTERVAL 3 DAY)
+              AND ot.created_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+              AND ot.created_at < CURDATE();
         ";
 
         return $this->query($query);
@@ -137,9 +138,8 @@ class ExternalDatabaseService
             FROM karo.refund_form AS rf
             LEFT JOIN karo.theatre AS t ON rf.theatre_id = t.id
             WHERE rf.status = 'INPROGRESS'
-              AND rf.type = 'AUTO'
-              AND rf.created_at >= DATE_SUB(NOW(), INTERVAL 3 DAY)
-              AND rf.created_at <= DATE_SUB(NOW(), INTERVAL 1 HOUR)
+              AND rf.created_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+              AND rf.created_at < CURDATE();
         ";
 
         return $this->query($query);
