@@ -211,7 +211,7 @@ class AlertTelegramService
 
             $message .= "<b>🎫 Данные по заказу:</b>\n";
             $message .= "Дата создания: <b>{$createdAt}</b>\n";
-            $message .= "ID заказа: <b>{$bookingId}</b>\n";
+            $message .= "Код брони: <b>{$bookingId}</b>\n";
             $message .= "Кинотеатр: <b>{$theatreName}</b>\n";
             $message .= "Канал продаж: <b>{$client}</b>\n";
             $message .= "Email: <b>{$email}</b>\n";
