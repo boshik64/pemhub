@@ -47,8 +47,8 @@ class CheckExternalAlerts extends Command
             $this->info('Подключение установлено');
 
             // Проверка 1: Незавершенные задачи заказов
-            $this->info('Проверка незавершенных задач заказов...');
-            $this->checkUnfinishedOrderTasks();
+            // $this->info('Проверка незавершенных задач заказов...');
+            // $this->checkUnfinishedOrderTasks();
 
             // Проверка 2: Незавершенные автовозвраты
             $this->info('Проверка незавершенных автовозвратов...');
