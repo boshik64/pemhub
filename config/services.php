@@ -42,6 +42,15 @@ return [
     'alert_telegram' => [
         'token' => env('ALERT_TELEGRAM_BOT_TOKEN'),
         'chats' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_CHAT_IDS', '')))),
+        // Чаты по территориям
+        'territories' => [
+            'IT_T1' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_IT_T1_CHAT_IDS', '')))),
+            'IT_T2' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_IT_T2_CHAT_IDS', '')))),
+            'IT_T3' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_IT_T3_CHAT_IDS', '')))),
+            'IT_T4' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_IT_T4_CHAT_IDS', '')))),
+        ],
+        // Общий чат, куда попадают ВСЕ алерты
+        'common_chat_ids' => array_filter(array_map('trim', explode(',', env('ALERT_TELEGRAM_COMMON_CHAT_IDS', '')))),
     ],
     'ssh_tunnel' => [
         'host' => env('SSH_TUNNEL_HOST'),
