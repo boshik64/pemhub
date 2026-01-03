@@ -134,9 +134,11 @@ class ExternalDatabaseService
                 rf.created_at, 
                 rf.updated_at, 
                 rf.status, 
-                rf.type
+                rf.type,
+                vc.vista_cinema_id
             FROM karo.refund_form AS rf
             LEFT JOIN karo.theatre AS t ON rf.theatre_id = t.id
+            LEFT JOIN karo.vista_cinema AS vc ON vc.theatre_id = rf.theatre_id
             WHERE rf.status = 'INPROGRESS'
               AND rf.created_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)
               AND rf.created_at < CURDATE();

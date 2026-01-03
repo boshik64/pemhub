@@ -94,9 +94,13 @@ class CheckExternalAlerts extends Command
 
             if (!empty($tasks)) {
                 $this->warn('Найдено незавершенных задач: ' . count($tasks));
-                $message = $this->telegramService->formatUnfinishedOrderTasksMessage($tasks);
-                $this->telegramService->sendMessage($message);
-                $this->info('Алерт отправлен в Telegram');
+                // Используем новый метод с маршрутизацией по территориям
+                $success = $this->telegramService->sendUnfinishedOrderTasksWithRouting($tasks);
+                if ($success) {
+                    $this->info('Алерты отправлены в Telegram с маршрутизацией по территориям');
+                } else {
+                    $this->warn('Некоторые алерты не удалось отправить');
+                }
             } else {
                 $this->info('Незавершенных задач не найдено');
             }
@@ -121,9 +125,13 @@ class CheckExternalAlerts extends Command
 
             if (!empty($refunds)) {
                 $this->warn('Найдено незавершенных автовозвратов: ' . count($refunds));
-                $message = $this->telegramService->formatUnfinishedAutoRefundsMessage($refunds);
-                $this->telegramService->sendMessage($message);
-                $this->info('Алерт отправлен в Telegram');
+                // Используем новый метод с маршрутизацией по территориям
+                $success = $this->telegramService->sendUnfinishedAutoRefundsWithRouting($refunds);
+                if ($success) {
+                    $this->info('Алерты отправлены в Telegram с маршрутизацией по территориям');
+                } else {
+                    $this->warn('Некоторые алерты не удалось отправить');
+                }
             } else {
                 $this->info('Незавершенных автовозвратов не найдено');
             }
