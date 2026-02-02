@@ -16,6 +16,9 @@ class Kernel extends ConsoleKernel
         //        $schedule->command('cert:test-msg')->everyMinute();
         $schedule->command('app:sync-karo-films-to-flix auto')->dailyAt('09:00')->timezone('Europe/Moscow');
         $schedule->command('check:external-alerts')->dailyAt('11:00')->timezone('Europe/Moscow');
+        // Инкрементальная синхронизация оффлайн-заказов Vista → Mindbox
+        // Частоту можно менять без изменения SQL (chunking/агрегация на уровне приложения).
+        $schedule->command('sync:vista-offline-orders')->everyTenMinutes()->timezone('Europe/Moscow');
     }
 
     /**

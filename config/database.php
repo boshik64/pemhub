@@ -108,6 +108,30 @@ return [
             'engine' => null,
         ],
 
+        /**
+         * Vista Loyalty (Microsoft SQL Server)
+         *
+         * Использовать в коде: DB::connection('vista')
+         *
+         * Все секреты только через .env:
+         * VISTA_DB_HOST, VISTA_DB_PORT, VISTA_DB_DATABASE, VISTA_DB_USERNAME, VISTA_DB_PASSWORD
+         */
+        'vista' => [
+            'driver' => 'sqlsrv',
+            'host' => env('VISTA_DB_HOST', 'localhost'),
+            'port' => env('VISTA_DB_PORT', '1433'),
+            'database' => env('VISTA_DB_DATABASE', ''),
+            'username' => env('VISTA_DB_USERNAME', ''),
+            'password' => env('VISTA_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            // Частая проблема с ODBC Driver 18: handshake/cert. Управляем через .env.
+            // Рекомендовано для теста: VISTA_DB_ENCRYPT=no и VISTA_DB_TRUST_SERVER_CERTIFICATE=true
+            'encrypt' => env('VISTA_DB_ENCRYPT', 'no'),
+            'trust_server_certificate' => env('VISTA_DB_TRUST_SERVER_CERTIFICATE', 'true'),
+        ],
+
     ],
 
     /*

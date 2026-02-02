@@ -62,4 +62,16 @@ return [
         'remote_db_port' => env('SSH_TUNNEL_REMOTE_DB_PORT', '3306'),
         'local_port' => env('SSH_TUNNEL_LOCAL_PORT', '13306'),
     ],
+
+    /**
+     * Mindbox integration (Offline.SaveOfflineOrder)
+     *
+     * В коде использовать только config('services.mindbox.*'), env() запрещен.
+     */
+    'mindbox' => [
+        'base_url' => env('MINDBOX_BASE_URL', 'https://api.s.mindbox.ru'),
+        'endpoint_id' => env('MINDBOX_ENDPOINT_ID', ''),
+        'secret_key' => env('MINDBOX_SECRET_KEY', ''),
+        'timeout' => (int) env('MINDBOX_TIMEOUT', 20),
+    ],
 ];
