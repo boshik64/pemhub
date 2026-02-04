@@ -35,12 +35,16 @@ class OfflineOrderPayloadBuilder
         // sessionTime в ISO 8601 UTC + 2 часа
         $orderSessionTime = $this->formatSessionTimeWithOffset($firstLine['transactionItem_sessionTime'] ?? null, 2);
 
-        // По ТЗ: lines с lineNumber (обязательно для Mindbox), product.ids.website (movie_ho), quantity, basePricePerItem
+        // product.ids.website: билеты — movie_ho; продукты — из item_nameAltLang (web_id=98 → 98) или item_code
         $lines = [];
         $lineNumber = 1;
         foreach ($orderLines as $line) {
-            $movieHo = (string) ($line['movie_ho'] ?? '');
+            $productWebsiteId = $this->resolveProductWebsiteId($line);
             $basePricePerItem = $line['transactionItem_spend'] ?? null;
+            // Mindbox: базовая цена не может содержать дробные доли копейки — округляем до целых копеек
+            if ($basePricePerItem !== null && is_numeric($basePricePerItem)) {
+                $basePricePerItem = round((float) $basePricePerItem, 2);
+            }
             $typeTicket = (string) ($line['item_name'] ?? '');
 
             $lines[] = [
@@ -52,7 +56,7 @@ class OfflineOrderPayloadBuilder
                 ],
                 'product' => [
                     'ids' => [
-                        'website' => $movieHo,
+                        'website' => $productWebsiteId,
                     ],
                 ],
                 'quantity' => 1,
@@ -91,6 +95,29 @@ class OfflineOrderPayloadBuilder
 
         // Не фильтруем весь payload — иначе пропадут sessionTime и lines
         return $payload;
+    }
+
+    /**
+     * Идентификатор продукта для Mindbox (product.ids.website):
+     * билеты на фильмы — movie_ho; продукты — из item_nameAltLang (web_id=98 → 98) или item_code.
+     *
+     * @param array<string, mixed> $line
+     * @return string
+     */
+    private function resolveProductWebsiteId(array $line): string
+    {
+        $movieHo = (string) ($line['movie_ho'] ?? '');
+        if ($movieHo !== '') {
+            return $movieHo;
+        }
+
+        $itemNameAltLang = (string) ($line['item_nameAltLang'] ?? '');
+        if ($itemNameAltLang !== '' && preg_match('/web_id=(.+)$/', $itemNameAltLang, $m)) {
+            return trim($m[1]);
+        }
+
+        $itemCode = (string) ($line['item_code'] ?? '');
+        return $itemCode;
     }
 
     /**

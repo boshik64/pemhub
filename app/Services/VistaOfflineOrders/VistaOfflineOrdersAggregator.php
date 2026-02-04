@@ -89,11 +89,13 @@ class VistaOfflineOrdersAggregator
      */
     private function extractLine(array $row): ?array
     {
-        // Пропускаем только полностью пустые строки (транзакция без позиций по JOIN)
+        // Пропускаем только полностью пустые строки (билеты на фильмы и продукты)
         $hasItemData = isset($row['transactionItem_lineItemCount'])
             || isset($row['transactionItem_spend'])
             || !empty($row['item_name'])
-            || !empty($row['movie_ho']);
+            || !empty($row['movie_ho'])
+            || !empty($row['item_nameAltLang'])
+            || !empty($row['item_code']);
         if (!$hasItemData) {
             return null;
         }
@@ -103,6 +105,8 @@ class VistaOfflineOrdersAggregator
             'transactionItem_spend' => $row['transactionItem_spend'] ?? null,
             'transactionItem_sessionTime' => $row['transactionItem_sessionTime'] ?? null,
             'item_name' => $row['item_name'] ?? null,
+            'item_nameAltLang' => $row['item_nameAltLang'] ?? null,
+            'item_code' => $row['item_code'] ?? null,
             'movie_ho' => $row['movie_ho'] ?? null,
             'movie_name' => $row['movie_name'] ?? null,
             'movie_code' => $row['movie_code'] ?? null,

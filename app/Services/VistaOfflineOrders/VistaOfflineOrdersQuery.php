@@ -22,7 +22,6 @@ class VistaOfflineOrdersQuery
 SELECT
     trans.transaction_id,
     trans.transaction_membershipid,
-    trans.transaction_cardNumber,
     trans.transaction_bookingId,
     trans.transaction_time,
     trans.transaction_salesChannel,
@@ -31,6 +30,8 @@ SELECT
     wcl.wcl_cinema_id,
 
     item.item_name,
+    item.item_nameAltLang,
+    item.item_code,
 
     movie.movie_name,
     movie.movie_code,
@@ -48,7 +49,8 @@ LEFT JOIN [VISTALOYALTY].[dbo].[cognetic_data_transactionItem] AS transi
 LEFT JOIN [VISTALOYALTY].[dbo].[cognetic_data_item] AS item
     ON transi.transactionItem_itemid = item.item_id
 
-LEFT JOIN [VISTALOYALTY].[dbo].[cognetic_rules_movie] AS movie
+-- FULL OUTER JOIN: чтобы попадали и билеты (есть movie), и продукты (нет movie)
+FULL OUTER JOIN [VISTALOYALTY].[dbo].[cognetic_rules_movie] AS movie
     ON transi.transactionItem_movieid = movie.movie_id
 
 LEFT JOIN [dbo].[cognetic_campaigns_complex] AS complex
@@ -58,8 +60,7 @@ LEFT JOIN [dbo].[WebCinemaList] AS wcl
     ON complex.complex_id = wcl.wcl_complex_id
 
 WHERE
-    trans.transaction_salesChannel IN (1, 2)
-    AND trans.transaction_bookingId IS NOT NULL
+    trans.transaction_salesChannel IN (1, 2, 8)
     AND trans.transaction_id > :last_processed_transaction_id
 
 ORDER BY trans.transaction_id ASC

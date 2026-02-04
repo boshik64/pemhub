@@ -23,7 +23,7 @@ class MindboxClient
             throw new RuntimeException('Mindbox конфигурация не настроена (MINDBOX_BASE_URL / MINDBOX_ENDPOINT_ID / MINDBOX_SECRET_KEY)');
         }
 
-        $url = $baseUrl . '/v3/operations/async'
+        $url = $baseUrl . '/v3/operations/sync'
             . '?endpointId=' . urlencode($endpointId)
             . '&operation=' . urlencode('Offline.SaveOfflineOrder');
 

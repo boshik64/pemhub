@@ -32,6 +32,9 @@ class VistaOfflineOrderSyncLogResource extends Resource
             Forms\Components\Placeholder::make('booking_id')
                 ->label('Booking ID')
                 ->content(fn (?VistaOfflineOrderSyncLog $record): string => $record ? ($record->source_data['header']['transaction_bookingId'] ?? '—') : '—'),
+            Forms\Components\Placeholder::make('sales_channel')
+                ->label('Канал продаж')
+                ->content(fn (?VistaOfflineOrderSyncLog $record): string => $record ? self::salesChannelName($record->source_data['header']['transaction_salesChannel'] ?? null) : '—'),
             Forms\Components\TextInput::make('status')
                 ->label('Статус')
                 ->disabled(),
@@ -77,6 +80,16 @@ class VistaOfflineOrderSyncLogResource extends Resource
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query->where('source_data->header->transaction_bookingId', 'like', "%{$search}%");
                     }),
+                Tables\Columns\TextColumn::make('sales_channel')
+                    ->label('Канал продаж')
+                    ->getStateUsing(fn (VistaOfflineOrderSyncLog $record) => self::salesChannelName($record->source_data['header']['transaction_salesChannel'] ?? null))
+                    ->badge()
+                    ->color(fn (VistaOfflineOrderSyncLog $record) => match ((int) ($record->source_data['header']['transaction_salesChannel'] ?? 0)) {
+                        1 => 'gray',
+                        2 => 'info',
+                        8 => 'success',
+                        default => 'warning',
+                    }),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Статус')
                     ->badge()
@@ -111,6 +124,24 @@ class VistaOfflineOrderSyncLogResource extends Resource
                         VistaOfflineOrderSyncLog::STATUS_SUCCESS => 'success',
                         VistaOfflineOrderSyncLog::STATUS_FAILED => 'failed',
                     ]),
+                Tables\Filters\Filter::make('sales_channel')
+                    ->form([
+                        Forms\Components\Select::make('value')
+                            ->label('Канал продаж')
+                            ->options([
+                                1 => 'Point of Sale',
+                                2 => 'Kiosk',
+                                8 => 'Smartix(КСО)',
+                            ])
+                            ->placeholder('Все'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        $value = $data['value'] ?? null;
+                        if ($value === null || $value === '') {
+                            return $query;
+                        }
+                        return $query->where('source_data->header->transaction_salesChannel', (int) $value);
+                    }),
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('from')->label('С'),
@@ -142,6 +173,19 @@ class VistaOfflineOrderSyncLogResource extends Resource
                     }),
             ])
             ->bulkActions([]);
+    }
+
+    /**
+     * Название канала продаж по ID (Vista transaction_salesChannel).
+     */
+    public static function salesChannelName($salesChannelId): string
+    {
+        return match ((int) $salesChannelId) {
+            1 => 'Point of Sale',
+            2 => 'Kiosk',
+            8 => 'Smartix(КСО)',
+            default => (string) ($salesChannelId ?? '—'),
+        };
     }
 
     public static function getPages(): array

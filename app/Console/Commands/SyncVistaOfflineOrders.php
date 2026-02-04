@@ -169,8 +169,7 @@ class SyncVistaOfflineOrders extends Command
 SELECT MIN(trans.transaction_id) AS min_id
 FROM [VISTALOYALTY].[dbo].[cognetic_data_transaction] AS trans
 WHERE
-    trans.transaction_salesChannel IN (1, 2)
-    AND trans.transaction_bookingId IS NOT NULL
+    trans.transaction_salesChannel IN (1, 2, 8)
     AND trans.transaction_time >= DATEADD(HOUR, -1, GETDATE())
 SQL;
 
