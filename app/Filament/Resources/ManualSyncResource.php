@@ -18,7 +18,7 @@ class ManualSyncResource extends Resource
 {
     protected static ?string $model = ManualSync::class;
 
-    protected static ?string $navigationLabel = 'Ручная синхронизация';
+    protected static ?string $navigationLabel = 'Ручная синхронизация (FLIX)';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Инструменты';
 

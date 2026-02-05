@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
@@ -50,6 +50,10 @@ class User extends Authenticatable
 
     public function canAccessPanel(Panel $panel): bool
     {
+        // Локальный админ — полный доступ (роль super_admin выдаётся отдельно)
+        if ($this->email === 'admin@example.com') {
+            return true;
+        }
         return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
     }
 
