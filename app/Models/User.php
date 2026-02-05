@@ -54,7 +54,7 @@ class User extends Authenticatable implements FilamentUser
         if ($this->email === 'admin@example.com') {
             return true;
         }
-        return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
+        return str_ends_with($this->email, '@karofilm.ru') && $this->hasVerifiedEmail();
     }
 
     public function workstations(): BelongsToMany
