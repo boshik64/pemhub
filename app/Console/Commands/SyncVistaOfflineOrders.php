@@ -17,6 +17,8 @@ class SyncVistaOfflineOrders extends Command
 
     protected $description = 'Инкрементальная синхронизация оффлайн-заказов из Vista (SQL Server) в Mindbox';
 
+    private const MAX_ATTEMPTS = 3;
+
     public function handle(
         VistaOfflineOrdersQuery $query,
         VistaOfflineOrdersAggregator $aggregator,
@@ -74,11 +76,28 @@ class SyncVistaOfflineOrders extends Command
                 ]
             );
 
+            // Если заказ уже "закрыт" (успешно или скипнут после лимита попыток) — ничего не делаем.
+            if (in_array($log->status, [VistaOfflineOrderSyncLog::STATUS_SUCCESS, VistaOfflineOrderSyncLog::STATUS_SKIPPED], true)) {
+                continue;
+            }
+
+            // Если превышен лимит попыток — скипаем, чтобы не блокировать хвост.
+            if ((int) $log->attempts >= self::MAX_ATTEMPTS) {
+                $log->update([
+                    'status' => VistaOfflineOrderSyncLog::STATUS_SKIPPED,
+                    'source_data' => $order,
+                    'error_message' => $log->error_message ?: 'Skipped: max attempts reached',
+                ]);
+                continue;
+            }
+
             // Если membershipID отсутствует — помечаем failed и НЕ диспатчим job.
             // Но оставляем возможность Retry из админки (вдруг данные появятся позже).
             if (trim($membershipId) === '') {
+                $nextAttempts = (int) $log->attempts + 1;
                 $log->update([
-                    'status' => VistaOfflineOrderSyncLog::STATUS_FAILED,
+                    'status' => $nextAttempts >= self::MAX_ATTEMPTS ? VistaOfflineOrderSyncLog::STATUS_SKIPPED : VistaOfflineOrderSyncLog::STATUS_FAILED,
+                    'attempts' => $nextAttempts,
                     'source_data' => $order,
                     'error_message' => 'Отсутствует обязательный transaction_membershipid (membershipID)',
                 ]);
@@ -140,7 +159,10 @@ class SyncVistaOfflineOrders extends Command
 
         $successInRange = VistaOfflineOrderSyncLog::query()
             ->whereBetween('transaction_id', [$last + 1, $target])
-            ->where('status', VistaOfflineOrderSyncLog::STATUS_SUCCESS)
+            ->whereIn('status', [
+                VistaOfflineOrderSyncLog::STATUS_SUCCESS,
+                VistaOfflineOrderSyncLog::STATUS_SKIPPED,
+            ])
             ->count();
 
         if ($totalInRange === 0) {

@@ -9,6 +9,7 @@ class VistaOfflineOrderSyncLog extends Model
     public const STATUS_PENDING = 'pending';
     public const STATUS_SUCCESS = 'success';
     public const STATUS_FAILED = 'failed';
+    public const STATUS_SKIPPED = 'skipped';
 
     protected $table = 'vista_offline_order_sync_logs';
 
