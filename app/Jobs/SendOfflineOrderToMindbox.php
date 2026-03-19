@@ -24,7 +24,7 @@ class SendOfflineOrderToMindbox implements ShouldQueue
 
     public int $transactionId;
 
-    public int $tries = 5;
+    public int $tries = 3;
 
     public function __construct(array $order)
     {
@@ -49,9 +49,10 @@ class SendOfflineOrderToMindbox implements ShouldQueue
 
         // membershipID обязателен. Если его нет — фиксируем ошибку и не шлем в Mindbox.
         if (trim($membershipId) === '') {
+            $nextAttempts = $log->attempts + 1;
             $log->update([
-                'status' => VistaOfflineOrderSyncLog::STATUS_FAILED,
-                'attempts' => $log->attempts + 1,
+                'status' => $nextAttempts >= 3 ? VistaOfflineOrderSyncLog::STATUS_SKIPPED : VistaOfflineOrderSyncLog::STATUS_FAILED,
+                'attempts' => $nextAttempts,
                 'source_data' => $this->order,
                 'error_message' => 'Отсутствует обязательный transaction_membershipid (membershipID)',
             ]);
@@ -60,9 +61,10 @@ class SendOfflineOrderToMindbox implements ShouldQueue
 
         $payload = $builder->build($this->order);
 
+        $nextAttempts = $log->attempts + 1;
         $log->update([
             'status' => VistaOfflineOrderSyncLog::STATUS_PENDING,
-            'attempts' => $log->attempts + 1,
+            'attempts' => $nextAttempts,
             'source_data' => $this->order,
             'request_payload' => $payload,
             'error_message' => null,
@@ -82,9 +84,13 @@ class SendOfflineOrderToMindbox implements ShouldQueue
                 ]);
             } else {
                 $log->update([
-                    'status' => VistaOfflineOrderSyncLog::STATUS_FAILED,
+                    'status' => $nextAttempts >= 3 ? VistaOfflineOrderSyncLog::STATUS_SKIPPED : VistaOfflineOrderSyncLog::STATUS_FAILED,
                     'error_message' => 'Mindbox response not successful: ' . $response->status(),
                 ]);
+
+                if ($nextAttempts >= 3) {
+                    return;
+                }
 
                 // Даем Laravel Queue повторить
                 throw new Exception('Mindbox error: ' . $response->status());
@@ -96,9 +102,13 @@ class SendOfflineOrderToMindbox implements ShouldQueue
             ]);
 
             $log->update([
-                'status' => VistaOfflineOrderSyncLog::STATUS_FAILED,
+                'status' => $nextAttempts >= 3 ? VistaOfflineOrderSyncLog::STATUS_SKIPPED : VistaOfflineOrderSyncLog::STATUS_FAILED,
                 'error_message' => $e->getMessage(),
             ]);
+
+            if ($nextAttempts >= 3) {
+                return;
+            }
 
             throw $e;
         }

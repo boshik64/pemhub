@@ -96,6 +96,7 @@ class VistaOfflineOrderSyncLogResource extends Resource
                     ->color(fn (VistaOfflineOrderSyncLog $record) => match ($record->status) {
                         VistaOfflineOrderSyncLog::STATUS_SUCCESS => 'success',
                         VistaOfflineOrderSyncLog::STATUS_FAILED => 'danger',
+                        VistaOfflineOrderSyncLog::STATUS_SKIPPED => 'gray',
                         default => 'warning',
                     })
                     ->sortable(),
@@ -123,6 +124,7 @@ class VistaOfflineOrderSyncLogResource extends Resource
                         VistaOfflineOrderSyncLog::STATUS_PENDING => 'pending',
                         VistaOfflineOrderSyncLog::STATUS_SUCCESS => 'success',
                         VistaOfflineOrderSyncLog::STATUS_FAILED => 'failed',
+                        VistaOfflineOrderSyncLog::STATUS_SKIPPED => 'skipped',
                     ]),
                 Tables\Filters\Filter::make('sales_channel')
                     ->form([
@@ -163,6 +165,7 @@ class VistaOfflineOrderSyncLogResource extends Resource
                     ->visible(fn (VistaOfflineOrderSyncLog $record) => in_array($record->status, [
                         VistaOfflineOrderSyncLog::STATUS_FAILED,
                         VistaOfflineOrderSyncLog::STATUS_PENDING,
+                        VistaOfflineOrderSyncLog::STATUS_SKIPPED,
                     ], true))
                     ->action(function (VistaOfflineOrderSyncLog $record): void {
                         // Для принудительной повторной отправки используем сохранённый source_data.
