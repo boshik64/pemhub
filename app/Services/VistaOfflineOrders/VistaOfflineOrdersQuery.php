@@ -39,6 +39,8 @@ SELECT
 
     transi.transactionItem_lineItemCount,
     transi.transactionItem_spend,
+    transi.transactionItem_tax,
+    (ISNULL(transi.transactionItem_spend, 0) + ISNULL(transi.transactionItem_tax, 0)) AS transactionItem_spend_with_tax,
     transi.transactionItem_sessionTime
 
 FROM [VISTALOYALTY].[dbo].[cognetic_data_transaction] AS trans
