@@ -92,6 +92,8 @@ class VistaOfflineOrdersAggregator
         // Пропускаем только полностью пустые строки (билеты на фильмы и продукты)
         $hasItemData = isset($row['transactionItem_lineItemCount'])
             || isset($row['transactionItem_spend'])
+            || isset($row['transactionItem_tax'])
+            || isset($row['transactionItem_spend_with_tax'])
             || !empty($row['item_name'])
             || !empty($row['movie_ho'])
             || !empty($row['item_nameAltLang'])
@@ -103,6 +105,8 @@ class VistaOfflineOrdersAggregator
         return [
             'transactionItem_lineItemCount' => $row['transactionItem_lineItemCount'] ?? null,
             'transactionItem_spend' => $row['transactionItem_spend'] ?? null,
+            'transactionItem_tax' => $row['transactionItem_tax'] ?? null,
+            'transactionItem_spend_with_tax' => $row['transactionItem_spend_with_tax'] ?? null,
             'transactionItem_sessionTime' => $row['transactionItem_sessionTime'] ?? null,
             'item_name' => $row['item_name'] ?? null,
             'item_nameAltLang' => $row['item_nameAltLang'] ?? null,

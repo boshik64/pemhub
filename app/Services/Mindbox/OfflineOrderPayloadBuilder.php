@@ -40,7 +40,9 @@ class OfflineOrderPayloadBuilder
         $lineNumber = 1;
         foreach ($orderLines as $line) {
             $productWebsiteId = $this->resolveProductWebsiteId($line);
-            $basePricePerItem = $line['transactionItem_spend'] ?? null;
+            // Стоимость в Vista = spend + tax (нужно учитывать налог)
+            $basePricePerItem = $line['transactionItem_spend_with_tax']
+                ?? $this->sumIfNumeric($line['transactionItem_spend'] ?? null, $line['transactionItem_tax'] ?? null);
             // Mindbox: базовая цена не может содержать дробные доли копейки — округляем до целых копеек
             if ($basePricePerItem !== null && is_numeric($basePricePerItem)) {
                 $basePricePerItem = round((float) $basePricePerItem, 2);
@@ -95,6 +97,16 @@ class OfflineOrderPayloadBuilder
 
         // Не фильтруем весь payload — иначе пропадут sessionTime и lines
         return $payload;
+    }
+
+    private function sumIfNumeric($a, $b): ?float
+    {
+        $hasA = $a !== null && $a !== '' && is_numeric($a);
+        $hasB = $b !== null && $b !== '' && is_numeric($b);
+        if (!$hasA && !$hasB) {
+            return null;
+        }
+        return (float) ($hasA ? $a : 0) + (float) ($hasB ? $b : 0);
     }
 
     /**
