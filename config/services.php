@@ -72,6 +72,7 @@ return [
         'base_url' => env('MINDBOX_BASE_URL', 'https://api.s.mindbox.ru'),
         'endpoint_id' => env('MINDBOX_ENDPOINT_ID', ''),
         'secret_key' => env('MINDBOX_SECRET_KEY', ''),
+        'order_lines_status' => env('MINDBOX_ORDER_LINES_STATUS', 'completed'),
         'timeout' => (int) env('MINDBOX_TIMEOUT', 20),
     ],
 ];
