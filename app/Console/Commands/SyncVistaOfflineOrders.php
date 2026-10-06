@@ -5,8 +5,10 @@ namespace App\Console\Commands;
 use App\Jobs\SendOfflineOrderToMindbox;
 use App\Models\VistaOfflineOrderSyncLog;
 use App\Models\VistaOfflineOrderSyncState;
+use App\Models\VistaOfflineSalesChannel;
 use App\Services\VistaOfflineOrders\VistaOfflineOrdersAggregator;
 use App\Services\VistaOfflineOrders\VistaOfflineOrdersQuery;
+use App\Services\VistaOfflineOrders\VistaSalesChannels;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -36,12 +38,23 @@ class SyncVistaOfflineOrders extends Command
         // Сначала пытаемся завершить предыдущий запуск (продвинуть last_processed_transaction_id)
         $this->finalizeIfPossible($state);
 
+        $channelIds = VistaOfflineSalesChannel::enabledIds();
+        if ($channelIds === []) {
+            $this->warn('Синхронизация пропущена: ни один канал продаж не включён.');
+            return Command::SUCCESS;
+        }
+
+        $this->info('Каналы: ' . implode(', ', array_map(
+            fn (int $id) => VistaSalesChannels::name($id),
+            $channelIds,
+        )));
+
         // Bootstrap для первого запуска: нельзя забирать всю историю.
         // Если last_processed_transaction_id = 0, ограничиваемся заказами за последний час:
         // вычисляем минимальный transaction_id за последний час и выставляем last_processed = minId - 1,
         // чтобы основной (обязательный) SQL выбрал только этот диапазон.
         if ((int) $state->last_processed_transaction_id === 0 && $state->target_transaction_id === null) {
-            $bootstrapMinId = $this->getBootstrapMinTransactionIdLastHour();
+            $bootstrapMinId = $this->getBootstrapMinTransactionIdLastHour($channelIds);
             if ($bootstrapMinId !== null && $bootstrapMinId > 0) {
                 $state->update([
                     'last_processed_transaction_id' => $bootstrapMinId - 1,
@@ -52,7 +65,7 @@ class SyncVistaOfflineOrders extends Command
         $lastProcessed = (int) $state->last_processed_transaction_id;
         $this->info("last_processed_transaction_id = {$lastProcessed}");
 
-        $rows = $query->stream($lastProcessed);
+        $rows = $query->stream($lastProcessed, $channelIds);
         $orders = $aggregator->aggregate($rows);
 
         $countOrders = 0;
@@ -184,16 +197,22 @@ class SyncVistaOfflineOrders extends Command
     /**
      * Возвращает минимальный transaction_id за последний час (с теми же базовыми фильтрами),
      * чтобы сделать безопасный первый запуск без чтения всей базы.
+     *
+     * @param list<int> $salesChannelIds
      */
-    private function getBootstrapMinTransactionIdLastHour(): ?int
+    private function getBootstrapMinTransactionIdLastHour(array $salesChannelIds): ?int
     {
-        $sql = <<<SQL
+        $sql = VistaSalesChannels::applyChannelFilter(<<<SQL
 SELECT MIN(trans.transaction_id) AS min_id
 FROM [VISTALOYALTY].[dbo].[cognetic_data_transaction] AS trans
 WHERE
     trans.transaction_salesChannel IN (1, 2, 8)
     AND trans.transaction_time >= DATEADD(HOUR, -1, GETDATE())
-SQL;
+SQL, $salesChannelIds);
+
+        if ($sql === null) {
+            return null;
+        }
 
         $row = DB::connection('vista')->selectOne($sql);
         if (!$row) {

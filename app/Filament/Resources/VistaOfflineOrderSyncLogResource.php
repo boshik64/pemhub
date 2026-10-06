@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\VistaOfflineOrderSyncLogResource\Pages;
 use App\Jobs\SendOfflineOrderToMindbox;
 use App\Models\VistaOfflineOrderSyncLog;
+use App\Services\VistaOfflineOrders\VistaSalesChannels;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -130,11 +131,7 @@ class VistaOfflineOrderSyncLogResource extends Resource
                     ->form([
                         Forms\Components\Select::make('value')
                             ->label('Канал продаж')
-                            ->options([
-                                1 => 'Point of Sale',
-                                2 => 'Kiosk',
-                                8 => 'Smartix(КСО)',
-                            ])
+                            ->options(VistaSalesChannels::options())
                             ->placeholder('Все'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -183,12 +180,7 @@ class VistaOfflineOrderSyncLogResource extends Resource
      */
     public static function salesChannelName($salesChannelId): string
     {
-        return match ((int) $salesChannelId) {
-            1 => 'Point of Sale',
-            2 => 'Kiosk',
-            8 => 'Smartix(КСО)',
-            default => (string) ($salesChannelId ?? '—'),
-        };
+        return VistaSalesChannels::name($salesChannelId);
     }
 
     public static function getPages(): array

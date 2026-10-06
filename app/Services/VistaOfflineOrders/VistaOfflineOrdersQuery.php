@@ -69,13 +69,18 @@ ORDER BY trans.transaction_id ASC
 SQL;
 
     /**
-     * @param int $lastProcessedTransactionId
+     * @param array<int|string> $salesChannelIds включённые каналы продаж
      * @return Generator<int, array<string, mixed>>
      */
-    public function stream(int $lastProcessedTransactionId): Generator
+    public function stream(int $lastProcessedTransactionId, array $salesChannelIds): Generator
     {
+        $sql = VistaSalesChannels::applyChannelFilter(self::SQL, $salesChannelIds);
+        if ($sql === null) {
+            return;
+        }
+
         $pdo = DB::connection('vista')->getPdo();
-        $stmt = $pdo->prepare(self::SQL);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'last_processed_transaction_id' => $lastProcessedTransactionId,
         ]);
